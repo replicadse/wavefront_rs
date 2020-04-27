@@ -1,6 +1,6 @@
 use std::fmt::Write;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum Entity {
     Comment{content: String},
     Object{name: String},
@@ -15,7 +15,7 @@ pub enum Entity {
     Line{vertices: Vec<i64>},
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct FaceVertex {
     pub vertex: i64,
     pub normal: Option<i64>,
@@ -39,7 +39,6 @@ impl FaceVertex {
         }
     }
 }
-
 
 impl ToString for Entity {
     fn to_string(&self) -> String {

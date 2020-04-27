@@ -109,7 +109,7 @@ impl LineParser {
                 Ok(Entity::Object{name: line.trim_start_matches("o ").to_owned()})
             }
             "g" => {
-                Ok(Entity::Object{name: line.trim_start_matches("g ").to_owned()})
+                Ok(Entity::Group{name: line.trim_start_matches("g ").to_owned()})
             }
             "s" => {
                 Ok(Entity::SmoothingGroup{name: line.trim_start_matches("s ").to_owned()})
