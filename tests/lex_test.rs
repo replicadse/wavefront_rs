@@ -1,23 +1,8 @@
 extern crate wavefront_rs;
-use std::io::{BufReader, Write};
+use std::io::BufReader;
 use wavefront_rs::lexer::*;
 use wavefront_rs::entity::*;
 use float_cmp::*;
-use std::rc::Rc;
-
-#[allow(dead_code)]
-fn test_lexer() {
-    let lexer = ReadLexer::new();
-    let stream = std::fs::File::open("/Users/heikoaweber/Desktop/buildings/building.obj");
-    let now = std::time::Instant::now();
-    let file = Rc::new(std::fs::File::create("/Users/heikoaweber/Desktop/output.obj").unwrap());
-    lexer.read(&mut std::io::BufReader::new(stream.unwrap()),
-        |x| {
-            file.as_ref().write_all(x.to_string().as_ref()).unwrap();
-        }).unwrap();
-    let nowafter = std::time::Instant::now();
-    println!("milliseconds: {}", nowafter.duration_since(now).as_millis());
-}
 
 #[test]
 fn test_comment() {

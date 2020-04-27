@@ -45,7 +45,7 @@ impl ToString for Entity {
         let mut result = "".to_owned();
         match self {
             Entity::Comment{content} => {
-                result.write_str(format!("# {}\n", content).as_ref()).unwrap();
+                result.write_str(format!("# {}", content).as_ref()).unwrap();
             }
             Entity::Face{vertices} => {
                 result.write_str("f".as_ref()).unwrap();
@@ -56,49 +56,48 @@ impl ToString for Entity {
                         result.write_str(format!("/{}", x).as_ref()).unwrap();
                     }
                     if let Some(x) = v.texture {
+                        if v.normal.is_none() {
+                            result.write_str("/".as_ref()).unwrap();
+                        }
                         result.write_str(format!("/{}", x).as_ref()).unwrap();
                     }
                 }
-                result.write_str("\n").as_ref().unwrap();
             }
             Entity::Line{vertices} => {
                 result.write_str("l").as_ref().unwrap();
                 for v in vertices {
                     result.write_str(format!(" {}", v).as_ref()).unwrap();
                 }
-                result.write_str("\n").as_ref().unwrap();
             }
             Entity::Group{name} => {
-                result.write_str(format!("g {}\n", name).as_ref()).unwrap();
+                result.write_str(format!("g {}", name).as_ref()).unwrap();
             }
             Entity::Mtllib{name} => {
-                result.write_str(format!("mtllib {}\n", name).as_ref()).unwrap();
+                result.write_str(format!("mtllib {}", name).as_ref()).unwrap();
             }
             Entity::Object{name} => {
-                result.write_str(format!("o {}\n", name).as_ref()).unwrap();
+                result.write_str(format!("o {}", name).as_ref()).unwrap();
             }
             Entity::SmoothingGroup{name} => {
-                result.write_str(format!("s {}\n", name).as_ref()).unwrap();
+                result.write_str(format!("s {}", name).as_ref()).unwrap();
             }
             Entity::Usemtl{name} => {
-                result.write_str(format!("usemtl {}\n", name).as_ref()).unwrap();
+                result.write_str(format!("usemtl {}", name).as_ref()).unwrap();
             }
             Entity::Vertex{x, y, z, w} => {
                 result.write_str(format!("v {} {} {}", x, y, z).as_ref()).unwrap();
                 if let Some(v) = w {
-                    result.write_str(format!("{}", v).as_ref()).unwrap();
+                    result.write_str(format!(" {}", v).as_ref()).unwrap();
                 }
-                result.write_str("\n").as_ref().unwrap();
             }
             Entity::VertexNormal{x, y, z} => {
-                result.write_str(format!("vn {} {} {}\n", x, y, z).as_ref()).unwrap();
+                result.write_str(format!("vn {} {} {}", x, y, z).as_ref()).unwrap();
             }
             Entity::VertexTexture{x, y, z} => {
                 result.write_str(format!("vt {} {}", x, y).as_ref()).unwrap();
                 if let Some(v) = z {
-                    result.write_str(format!("{}", v).as_ref()).unwrap();
+                    result.write_str(format!(" {}", v).as_ref()).unwrap();
                 }
-                result.write_str("\n").as_ref().unwrap();
             }
         }
         result
