@@ -20,7 +20,7 @@ impl ReadLexer {
 }
 
 impl Lexer for ReadLexer {
-    fn read<R: BufRead>(&self, reader: &mut R, mut callback: impl FnMut(Entity)) -> Result<(), LexerError> {
+    fn read<R: BufRead>(&self, reader: &mut R, callback: impl Fn(Entity)) -> Result<(), LexerError> {
         let parser = LineParser{};
         for l in reader.lines() {
             let s: String = l?;
