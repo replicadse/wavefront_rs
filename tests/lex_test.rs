@@ -2,15 +2,16 @@ extern crate wavefront_rs;
 use std::io::{BufReader, Write};
 use wavefront_rs::lexer::*;
 use wavefront_rs::entity::*;
+use float_cmp::*;
 use std::rc::Rc;
 
 #[allow(dead_code)]
 fn test_lexer() {
     let lexer = ReadLexer::new();
-    let stream = std::fs::read_to_string("/Users/heikoaweber/Desktop/buildings/building.obj");
+    let stream = std::fs::File::open("/Users/heikoaweber/Desktop/buildings/building.obj");
     let now = std::time::Instant::now();
     let file = Rc::new(std::fs::File::create("/Users/heikoaweber/Desktop/output.obj").unwrap());
-    lexer.read(&mut std::io::BufReader::new(stream.unwrap().as_bytes()), 
+    lexer.read(&mut std::io::BufReader::new(stream.unwrap()),
         |x| {
             file.as_ref().write_all(x.to_string().as_ref()).unwrap();
         }).unwrap();
@@ -20,7 +21,7 @@ fn test_lexer() {
 
 #[test]
 fn test_comment() {
-    let stream = "# token".as_bytes();
+    let stream = std::io::Cursor::new("# token");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
     lexer.read(&mut BufReader::new(stream), 
@@ -36,7 +37,7 @@ fn test_comment() {
 
 #[test]
 fn test_object() {
-    let stream = "o token".as_bytes();
+    let stream = std::io::Cursor::new("o token");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
     lexer.read(&mut BufReader::new(stream), 
@@ -52,7 +53,7 @@ fn test_object() {
 
 #[test]
 fn test_group() {
-    let stream = "g token".as_bytes();
+    let stream = std::io::Cursor::new("g token");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
     lexer.read(&mut BufReader::new(stream), 
@@ -68,7 +69,7 @@ fn test_group() {
 
 #[test]
 fn test_smoothing_group() {
-    let stream = "s token".as_bytes();
+    let stream = std::io::Cursor::new("s token");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
     lexer.read(&mut BufReader::new(stream), 
@@ -84,7 +85,7 @@ fn test_smoothing_group() {
 
 #[test]
 fn test_mtllib() {
-    let stream = "mtllib token".as_bytes();
+    let stream = std::io::Cursor::new("mtllib token");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
     lexer.read(&mut BufReader::new(stream), 
@@ -100,7 +101,7 @@ fn test_mtllib() {
 
 #[test]
 fn test_usemtl() {
-    let stream = "usemtl token".as_bytes();
+    let stream = std::io::Cursor::new("usemtl token");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
     lexer.read(&mut BufReader::new(stream), 
@@ -116,16 +117,16 @@ fn test_usemtl() {
 
 #[test]
 fn test_vertex() {
-    let stream = "v 0.1 1.2 2.3 3.4".as_bytes();
+    let stream = std::io::Cursor::new("v 0.1 1.2 2.3 3.4");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
     lexer.read(&mut BufReader::new(stream), 
         |v| {
             if let Entity::Vertex{x, y, z, w} = v {
-                assert_eq!(0.1, x);
-                assert_eq!(1.2, y);
-                assert_eq!(2.3, z);
-                assert_eq!(3.4, w.unwrap());
+                assert!(approx_eq!(f64, 0.1, x, epsilon=1e-5));
+                assert!(approx_eq!(f64, 1.2, y, epsilon=1e-5));
+                assert!(approx_eq!(f64, 2.3, z, epsilon=1e-5));
+                assert!(approx_eq!(f64, 3.4, w.unwrap(), epsilon=1e-5));
                 exists.set(true);
             };
         }).unwrap();
@@ -134,15 +135,15 @@ fn test_vertex() {
 
 #[test]
 fn test_vertex_normal() {
-    let stream = "vn 0.1 1.2 2.3".as_bytes();
+    let stream = std::io::Cursor::new("vn 0.1 1.2 2.3");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
     lexer.read(&mut BufReader::new(stream), 
         |v| {
             if let Entity::VertexNormal{x, y, z} = v {
-                assert_eq!(0.1, x);
-                assert_eq!(1.2, y);
-                assert_eq!(2.3, z);
+                assert!(approx_eq!(f64, 0.1, x, epsilon=1e-5));
+                assert!(approx_eq!(f64, 1.2, y, epsilon=1e-5));
+                assert!(approx_eq!(f64, 2.3, z, epsilon=1e-5));
                 exists.set(true);
             };
         }).unwrap();
@@ -151,15 +152,15 @@ fn test_vertex_normal() {
 
 #[test]
 fn test_vertex_texture() {
-    let stream = "vt 0.1 1.2 2.3".as_bytes();
+    let stream = std::io::Cursor::new("vt 0.1 1.2 2.3");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
     lexer.read(&mut BufReader::new(stream), 
         |v| {
             if let Entity::VertexTexture{x, y, z} = v {
-                assert_eq!(0.1, x);
-                assert_eq!(1.2, y);
-                assert_eq!(2.3, z.unwrap());
+                assert!(approx_eq!(f64, 0.1, x, epsilon=1e-5));
+                assert!(approx_eq!(f64, 1.2, y, epsilon=1e-5));
+                assert!(approx_eq!(f64, 2.3, z.unwrap(), epsilon=1e-5));
                 exists.set(true);
             };
         }).unwrap();
@@ -168,7 +169,7 @@ fn test_vertex_texture() {
 
 #[test]
 fn test_face_vnt_3() {
-    let stream = "f 0/1/2 3/4/5 6/7/8".as_bytes();
+    let stream = std::io::Cursor::new("f 0/1/2 3/4/5 6/7/8");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
     lexer.read(&mut BufReader::new(stream), 
@@ -186,7 +187,7 @@ fn test_face_vnt_3() {
 
 #[test]
 fn test_face_vnt_6() {
-    let stream = "f 0/1/2 3/4/5 6/7/8 9/10/11 12/13/14".as_bytes();
+    let stream = std::io::Cursor::new("f 0/1/2 3/4/5 6/7/8 9/10/11 12/13/14");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
     lexer.read(&mut BufReader::new(stream), 
@@ -206,7 +207,7 @@ fn test_face_vnt_6() {
 
 #[test]
 fn test_face_vt() {
-    let stream = "f 0//2 3//5 6//8".as_bytes();
+    let stream = std::io::Cursor::new("f 0//2 3//5 6//8");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
     lexer.read(&mut BufReader::new(stream), 
@@ -224,7 +225,7 @@ fn test_face_vt() {
 
 #[test]
 fn test_face_vn() {
-    let stream = "f 0/1 3/4 6/7".as_bytes();
+    let stream = std::io::Cursor::new("f 0/1 3/4 6/7");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
     lexer.read(&mut BufReader::new(stream), 
@@ -242,7 +243,7 @@ fn test_face_vn() {
 
 #[test]
 fn test_face_v() {
-    let stream = "f 0 3 6".as_bytes();
+    let stream = std::io::Cursor::new("f 0 3 6");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
     lexer.read(&mut BufReader::new(stream), 
@@ -260,7 +261,7 @@ fn test_face_v() {
 
 #[test]
 fn test_line() {
-    let stream = "l 0 1 2 3 4".as_bytes();
+    let stream = std::io::Cursor::new("l 0 1 2 3 4");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
     lexer.read(&mut BufReader::new(stream), 
