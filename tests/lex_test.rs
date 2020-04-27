@@ -116,7 +116,7 @@ fn test_usemtl() {
 }
 
 #[test]
-fn test_vertex() {
+fn test_vertex_xyzw() {
     let stream = std::io::Cursor::new("v 0.1 1.2 2.3 3.4");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
@@ -127,6 +127,24 @@ fn test_vertex() {
                 assert!(approx_eq!(f64, 1.2, y, epsilon=1e-5));
                 assert!(approx_eq!(f64, 2.3, z, epsilon=1e-5));
                 assert!(approx_eq!(f64, 3.4, w.unwrap(), epsilon=1e-5));
+                exists.set(true);
+            };
+        }).unwrap();
+    assert_eq!(true, exists.take());
+}
+
+#[test]
+fn test_vertex_xyz() {
+    let stream = std::io::Cursor::new("v 0.1 1.2 2.3");
+    let lexer = ReadLexer::new();
+    let exists = std::cell::Cell::new(false);
+    lexer.read(&mut BufReader::new(stream), 
+        |v| {
+            if let Entity::Vertex{x, y, z, w} = v {
+                assert!(approx_eq!(f64, 0.1, x, epsilon=1e-5));
+                assert!(approx_eq!(f64, 1.2, y, epsilon=1e-5));
+                assert!(approx_eq!(f64, 2.3, z, epsilon=1e-5));
+                assert_eq!(None, w);
                 exists.set(true);
             };
         }).unwrap();
@@ -151,7 +169,7 @@ fn test_vertex_normal() {
 }
 
 #[test]
-fn test_vertex_texture() {
+fn test_vertex_texture_xyz() {
     let stream = std::io::Cursor::new("vt 0.1 1.2 2.3");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
@@ -161,6 +179,23 @@ fn test_vertex_texture() {
                 assert!(approx_eq!(f64, 0.1, x, epsilon=1e-5));
                 assert!(approx_eq!(f64, 1.2, y, epsilon=1e-5));
                 assert!(approx_eq!(f64, 2.3, z.unwrap(), epsilon=1e-5));
+                exists.set(true);
+            };
+        }).unwrap();
+    assert_eq!(true, exists.take());
+}
+
+#[test]
+fn test_vertex_texture_xy() {
+    let stream = std::io::Cursor::new("vt 0.1 1.2");
+    let lexer = ReadLexer::new();
+    let exists = std::cell::Cell::new(false);
+    lexer.read(&mut BufReader::new(stream), 
+        |v| {
+            if let Entity::VertexTexture{x, y, z} = v {
+                assert!(approx_eq!(f64, 0.1, x, epsilon=1e-5));
+                assert!(approx_eq!(f64, 1.2, y, epsilon=1e-5));
+                assert_eq!(None, z);
                 exists.set(true);
             };
         }).unwrap();
