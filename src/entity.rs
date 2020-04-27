@@ -1,4 +1,11 @@
 use std::fmt::Write;
+use std::io::{Cursor, BufReader};
+use crate::error::ParseError;
+use crate::lexer::*;
+
+pub trait From<I, R> {
+    fn from(input: I) -> Result<R, ParseError>;
+}
 
 #[derive(Debug, PartialEq)]
 pub enum Entity {
@@ -101,5 +108,12 @@ impl ToString for Entity {
             }
         }
         result
+    }
+}
+
+impl From<&str, Entity> for Entity {
+    fn from(input: &str) -> Result<Entity, ParseError> {
+        let lexer = ReadLexer::new();
+        lexer.read_line(&mut BufReader::new(Cursor::new(input)))
     }
 }

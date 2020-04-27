@@ -1,16 +1,16 @@
 #[derive(Debug)]
-pub struct LexerError {
+pub struct ParseError {
     details: String
 }
 
-impl LexerError {
-    pub fn new(msg: &str) -> LexerError {
-        LexerError{details: msg.to_string()}
+impl ParseError {
+    pub fn new(msg: &str) -> ParseError {
+        ParseError{details: msg.to_string()}
     }
 }
 
-impl std::convert::From<std::io::Error> for LexerError {
-    fn from(e: std::io::Error) -> LexerError {
-        LexerError::new(&e.to_string())
+impl std::convert::From<std::io::Error> for ParseError {
+    fn from(e: std::io::Error) -> ParseError {
+        ParseError::new(&e.to_string())
     }
 }

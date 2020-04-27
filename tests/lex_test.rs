@@ -9,7 +9,7 @@ fn test_comment() {
     let stream = std::io::Cursor::new("# token");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
-    lexer.read(&mut BufReader::new(stream), 
+    lexer.read_to_end(&mut BufReader::new(stream), 
         |x| {
             if let Entity::Comment{content} = x {
                 if content == "token" {
@@ -25,7 +25,7 @@ fn test_object() {
     let stream = std::io::Cursor::new("o token");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
-    lexer.read(&mut BufReader::new(stream), 
+    lexer.read_to_end(&mut BufReader::new(stream), 
         |x| {
             if let Entity::Object{name} = x {
                 if name == "token" {
@@ -41,7 +41,7 @@ fn test_group() {
     let stream = std::io::Cursor::new("g token");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
-    lexer.read(&mut BufReader::new(stream), 
+    lexer.read_to_end(&mut BufReader::new(stream), 
         |x| {
             if let Entity::Group{name} = x {
                 if name == "token" {
@@ -57,7 +57,7 @@ fn test_smoothing_group() {
     let stream = std::io::Cursor::new("s token");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
-    lexer.read(&mut BufReader::new(stream), 
+    lexer.read_to_end(&mut BufReader::new(stream), 
         |x| {
             if let Entity::SmoothingGroup{name} = x {
                 if name == "token" {
@@ -73,7 +73,7 @@ fn test_mtllib() {
     let stream = std::io::Cursor::new("mtllib token");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
-    lexer.read(&mut BufReader::new(stream), 
+    lexer.read_to_end(&mut BufReader::new(stream), 
         |x| {
             if let Entity::Mtllib{name} = x {
                 if name == "token" {
@@ -89,7 +89,7 @@ fn test_usemtl() {
     let stream = std::io::Cursor::new("usemtl token");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
-    lexer.read(&mut BufReader::new(stream), 
+    lexer.read_to_end(&mut BufReader::new(stream), 
         |x| {
             if let Entity::Usemtl{name} = x {
                 if name == "token" {
@@ -105,7 +105,7 @@ fn test_vertex_xyzw() {
     let stream = std::io::Cursor::new("v 0.1 1.2 2.3 3.4");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
-    lexer.read(&mut BufReader::new(stream), 
+    lexer.read_to_end(&mut BufReader::new(stream), 
         |v| {
             if let Entity::Vertex{x, y, z, w} = v {
                 assert!(approx_eq!(f64, 0.1, x, epsilon=1e-5));
@@ -123,7 +123,7 @@ fn test_vertex_xyz() {
     let stream = std::io::Cursor::new("v 0.1 1.2 2.3");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
-    lexer.read(&mut BufReader::new(stream), 
+    lexer.read_to_end(&mut BufReader::new(stream), 
         |v| {
             if let Entity::Vertex{x, y, z, w} = v {
                 assert!(approx_eq!(f64, 0.1, x, epsilon=1e-5));
@@ -141,7 +141,7 @@ fn test_vertex_normal() {
     let stream = std::io::Cursor::new("vn 0.1 1.2 2.3");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
-    lexer.read(&mut BufReader::new(stream), 
+    lexer.read_to_end(&mut BufReader::new(stream), 
         |v| {
             if let Entity::VertexNormal{x, y, z} = v {
                 assert!(approx_eq!(f64, 0.1, x, epsilon=1e-5));
@@ -158,7 +158,7 @@ fn test_vertex_texture_xyz() {
     let stream = std::io::Cursor::new("vt 0.1 1.2 2.3");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
-    lexer.read(&mut BufReader::new(stream), 
+    lexer.read_to_end(&mut BufReader::new(stream), 
         |v| {
             if let Entity::VertexTexture{x, y, z} = v {
                 assert!(approx_eq!(f64, 0.1, x, epsilon=1e-5));
@@ -175,7 +175,7 @@ fn test_vertex_texture_xy() {
     let stream = std::io::Cursor::new("vt 0.1 1.2");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
-    lexer.read(&mut BufReader::new(stream), 
+    lexer.read_to_end(&mut BufReader::new(stream), 
         |v| {
             if let Entity::VertexTexture{x, y, z} = v {
                 assert!(approx_eq!(f64, 0.1, x, epsilon=1e-5));
@@ -192,7 +192,7 @@ fn test_face_vnt_3() {
     let stream = std::io::Cursor::new("f 0/1/2 3/4/5 6/7/8");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
-    lexer.read(&mut BufReader::new(stream), 
+    lexer.read_to_end(&mut BufReader::new(stream), 
         |v| {
             if let Entity::Face{vertices} = v {
                 assert_eq!(3, vertices.len());
@@ -210,7 +210,7 @@ fn test_face_vnt_6() {
     let stream = std::io::Cursor::new("f 0/1/2 3/4/5 6/7/8 9/10/11 12/13/14");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
-    lexer.read(&mut BufReader::new(stream), 
+    lexer.read_to_end(&mut BufReader::new(stream), 
         |v| {
             if let Entity::Face{vertices} = v {
                 assert_eq!(5, vertices.len());
@@ -230,7 +230,7 @@ fn test_face_vt() {
     let stream = std::io::Cursor::new("f 0//2 3//5 6//8");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
-    lexer.read(&mut BufReader::new(stream), 
+    lexer.read_to_end(&mut BufReader::new(stream), 
         |v| {
             if let Entity::Face{vertices} = v {
                 assert_eq!(3, vertices.len());
@@ -248,7 +248,7 @@ fn test_face_vn() {
     let stream = std::io::Cursor::new("f 0/1 3/4 6/7");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
-    lexer.read(&mut BufReader::new(stream), 
+    lexer.read_to_end(&mut BufReader::new(stream), 
         |v| {
             if let Entity::Face{vertices} = v {
                 assert_eq!(3, vertices.len());
@@ -266,7 +266,7 @@ fn test_face_v() {
     let stream = std::io::Cursor::new("f 0 3 6");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
-    lexer.read(&mut BufReader::new(stream), 
+    lexer.read_to_end(&mut BufReader::new(stream), 
         |v| {
             if let Entity::Face{vertices} = v {
                 assert_eq!(3, vertices.len());
@@ -284,7 +284,7 @@ fn test_line() {
     let stream = std::io::Cursor::new("l 0 1 2 3 4");
     let lexer = ReadLexer::new();
     let exists = std::cell::Cell::new(false);
-    lexer.read(&mut BufReader::new(stream), 
+    lexer.read_to_end(&mut BufReader::new(stream), 
         |v| {
             if let Entity::Line{vertices} = v {
                 assert_eq!(5, vertices.len());
