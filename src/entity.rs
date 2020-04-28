@@ -1,11 +1,8 @@
 use std::fmt::Write;
 use std::io::{Cursor, BufReader};
-use crate::error::ParseError;
 use crate::lexer::*;
 
-pub trait From<I, R> {
-    fn from(input: I) -> Result<R, ParseError>;
-}
+pub type ObjFormat = String;
 
 #[derive(Debug, PartialEq)]
 pub enum Entity {
@@ -30,7 +27,7 @@ pub struct FaceVertex {
 }
 
 impl FaceVertex {
-    pub fn new(vertex: i64) -> FaceVertex {
+    pub fn new(vertex: i64) -> Self {
         Self {
             vertex,
             normal: None,
@@ -38,7 +35,7 @@ impl FaceVertex {
         }
     }
 
-    pub fn new2(vertex: i64, normal: Option<i64>, texture: Option<i64>) -> FaceVertex {
+    pub fn new2(vertex: i64, normal: Option<i64>, texture: Option<i64>) -> Self {
         Self {
             vertex,
             normal,
@@ -47,14 +44,21 @@ impl FaceVertex {
     }
 }
 
-impl ToString for Entity {
-    fn to_string(&self) -> String {
+impl From<ObjFormat> for Entity {
+    fn from(input: ObjFormat) -> Self {
+        let lexer = ReadLexer::new();
+        lexer.read_line(&mut BufReader::new(Cursor::new(input))).unwrap()
+    }
+}
+
+impl Into<ObjFormat> for Entity {
+    fn into(self) -> String {
         let mut result = "".to_owned();
         match self {
-            Entity::Comment{content} => {
+            Self::Comment{content} => {
                 result.write_str(format!("# {}", content).as_ref()).unwrap();
             }
-            Entity::Face{vertices} => {
+            Self::Face{vertices} => {
                 result.write_str("f".as_ref()).unwrap();
                 for v in vertices {
                     result.write_str(" ".as_ref()).unwrap();
@@ -70,37 +74,37 @@ impl ToString for Entity {
                     }
                 }
             }
-            Entity::Line{vertices} => {
+            Self::Line{vertices} => {
                 result.write_str("l").as_ref().unwrap();
                 for v in vertices {
                     result.write_str(format!(" {}", v).as_ref()).unwrap();
                 }
             }
-            Entity::Group{name} => {
+            Self::Group{name} => {
                 result.write_str(format!("g {}", name).as_ref()).unwrap();
             }
-            Entity::Mtllib{name} => {
+            Self::Mtllib{name} => {
                 result.write_str(format!("mtllib {}", name).as_ref()).unwrap();
             }
-            Entity::Object{name} => {
+            Self::Object{name} => {
                 result.write_str(format!("o {}", name).as_ref()).unwrap();
             }
-            Entity::SmoothingGroup{name} => {
+            Self::SmoothingGroup{name} => {
                 result.write_str(format!("s {}", name).as_ref()).unwrap();
             }
-            Entity::Usemtl{name} => {
+            Self::Usemtl{name} => {
                 result.write_str(format!("usemtl {}", name).as_ref()).unwrap();
             }
-            Entity::Vertex{x, y, z, w} => {
+            Self::Vertex{x, y, z, w} => {
                 result.write_str(format!("v {} {} {}", x, y, z).as_ref()).unwrap();
                 if let Some(v) = w {
                     result.write_str(format!(" {}", v).as_ref()).unwrap();
                 }
             }
-            Entity::VertexNormal{x, y, z} => {
+            Self::VertexNormal{x, y, z} => {
                 result.write_str(format!("vn {} {} {}", x, y, z).as_ref()).unwrap();
             }
-            Entity::VertexTexture{x, y, z} => {
+            Self::VertexTexture{x, y, z} => {
                 result.write_str(format!("vt {} {}", x, y).as_ref()).unwrap();
                 if let Some(v) = z {
                     result.write_str(format!(" {}", v).as_ref()).unwrap();
@@ -108,12 +112,5 @@ impl ToString for Entity {
             }
         }
         result
-    }
-}
-
-impl From<&str, Entity> for Entity {
-    fn from(input: &str) -> Result<Entity, ParseError> {
-        let lexer = ReadLexer::new();
-        lexer.read_line(&mut BufReader::new(Cursor::new(input)))
     }
 }
