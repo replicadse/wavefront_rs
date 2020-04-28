@@ -6,8 +6,8 @@ edition = "2018"
 license = "MIT"
 description = "Standardizing messages the right way."
 readme = "docs/README.md"
-homepage = "https://heikoalexanderweber.github.io/wavefront_rs/"
-repository = "https://github.com/HeikoAlexanderWeber/wavefront_rs"
+homepage = "https://replicadse.github.io/wavefront_rs/"
+repository = "https://github.com/replicadse/wavefront_rs"
 keywords = ["wavefront", "obj", "mtl"]
 categories = ["parser-implementations", "encoding", "graphics"]
 
