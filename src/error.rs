@@ -1,16 +1,16 @@
 #[derive(Debug)]
-pub struct ParseError {
+pub struct Error {
     details: String
 }
 
-impl ParseError {
-    pub fn new(msg: &str) -> ParseError {
-        ParseError{details: msg.to_string()}
+impl Error {
+    pub fn new(msg: &str) -> Error {
+        Error{details: msg.to_string()}
     }
 }
 
-impl std::convert::From<std::io::Error> for ParseError {
-    fn from(e: std::io::Error) -> ParseError {
-        ParseError::new(&e.to_string())
+impl From<std::io::Error> for Error {
+    fn from(e: std::io::Error) -> Error {
+        Error::new(&e.to_string())
     }
 }

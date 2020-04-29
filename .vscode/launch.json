@@ -26,16 +26,16 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug integration test 'lex_test'",
+            "name": "Debug integration test 'tests'",
             "cargo": {
                 "args": [
                     "test",
                     "--no-run",
-                    "--test=lex_test",
+                    "--test=tests",
                     "--package=wavefront_rs"
                 ],
                 "filter": {
-                    "name": "lex_test",
+                    "name": "tests",
                     "kind": "test"
                 }
             },
