@@ -1,10 +1,15 @@
+//! Contains the logic to transform entities to OBJ formatted strings.
+//! 
+
 use crate::obj::entity::Entity;
 use std::io::Write;
 
+/// Will write entities to a `Write` trait.
 pub struct FormatWriter {
 }
 
 impl FormatWriter {
+    /// Writes the given entity to the given `Write` trait as OBJ format representation of that `Entity`.
     pub fn write<W: Write>(writer: &mut W, e: &Entity) {
         match e {
             Entity::Comment{content} => {

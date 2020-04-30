@@ -1,3 +1,6 @@
+//! The error module contains a generic error that is used by the rest of the crate.
+//! 
+
 #[derive(Debug)]
 pub struct Error {
     details: String
