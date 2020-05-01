@@ -1,15 +1,14 @@
 //! Contains logic to read entities from a `BufRead` that returns OBJ formatted strings.
-//! 
+//!
 
+use crate::error::Error;
 use crate::obj::entity::Entity;
 use crate::obj::line_parser::LineParser;
-use std::result::Result;
 use std::io::BufRead;
-use crate::error::Error;
+use std::result::Result;
 
 /// Will read from a given `BufRead` and parse entities.
-pub struct ReadLexer {
-}
+pub struct ReadLexer {}
 
 impl ReadLexer {
     /// Will read from the given `BufRead`as long as it is not EOF.\
@@ -38,12 +37,8 @@ impl ReadLexer {
                 if x > 0 {
                     let mut split = value.split_whitespace();
                     match split.next() {
-                        Some(x) => {
-                            LineParser::parse_line(&mut split, x, value.as_ref())
-                        }
-                        None => {
-                            Err(Error::new("invalid line"))
-                        }
+                        Some(x) => LineParser::parse_line(&mut split, x, value.as_ref()),
+                        None => Err(Error::new("invalid line")),
                     }
                 } else {
                     Err(Error::new("reached EOF"))

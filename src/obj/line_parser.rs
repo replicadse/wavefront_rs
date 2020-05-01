@@ -1,62 +1,55 @@
-use crate::obj::entity::{Entity, FaceVertex};
 use crate::error::Error;
+use crate::obj::entity::{Entity, FaceVertex};
 
-pub struct LineParser {
-}
+pub struct LineParser {}
 
 impl LineParser {
-    pub fn parse_line(split: &mut std::str::SplitWhitespace, token: &str, line: &str) -> Result<Entity, Error> {
+    pub fn parse_line(
+        split: &mut std::str::SplitWhitespace,
+        token: &str,
+        line: &str,
+    ) -> Result<Entity, Error> {
         match token.to_lowercase().as_str() {
-            "#" => {
-                Ok(Entity::Comment{content: line.trim_start_matches("# ").to_owned()})
-            }
-            "o" => {
-                Ok(Entity::Object{name: line.trim_start_matches("o ").to_owned()})
-            }
-            "g" => {
-                Ok(Entity::Group{name: line.trim_start_matches("g ").to_owned()})
-            }
-            "s" => {
-                Ok(Entity::SmoothingGroup{name: line.trim_start_matches("s ").to_owned()})
-            }
-            "mg" => {
-                Ok(Entity::MergingGroup{name: line.trim_start_matches("mg ").to_owned()})
-            }
-            "v" => {
-                Self::parse_v(split)
-            }
-            "vn" => {
-                Self::parse_vn(split)
-            }
-            "vt" => {
-                Self::parse_vt_vp(true, split)
-            }
-            "vp" => {
-                Self::parse_vt_vp(false, split)
-            }
-            "f" => {
-                Self::parse_face(split)
-            }
-            "l" => {
-                Self::parse_polyline(split)
-            }
+            "#" => Ok(Entity::Comment {
+                content: line.trim_start_matches("# ").to_owned(),
+            }),
+            "o" => Ok(Entity::Object {
+                name: line.trim_start_matches("o ").to_owned(),
+            }),
+            "g" => Ok(Entity::Group {
+                name: line.trim_start_matches("g ").to_owned(),
+            }),
+            "s" => Ok(Entity::SmoothingGroup {
+                name: line.trim_start_matches("s ").to_owned(),
+            }),
+            "mg" => Ok(Entity::MergingGroup {
+                name: line.trim_start_matches("mg ").to_owned(),
+            }),
+            "v" => Self::parse_v(split),
+            "vn" => Self::parse_vn(split),
+            "vt" => Self::parse_vt_vp(true, split),
+            "vp" => Self::parse_vt_vp(false, split),
+            "f" => Self::parse_face(split),
+            "l" => Self::parse_polyline(split),
             "mtllib" => {
                 if let Some(x) = split.next() {
-                    Ok(Entity::Mtllib{name: x.to_owned()})
+                    Ok(Entity::Mtllib { name: x.to_owned() })
                 } else {
-                    Err(Error::new(format!("could not parse line \"{}\"", token).as_ref()))
+                    Err(Error::new(
+                        format!("could not parse line \"{}\"", token).as_ref(),
+                    ))
                 }
-            },
+            }
             "usemtl" => {
                 if let Some(x) = split.next() {
-                    Ok(Entity::Usemtl{name: x.to_owned()})
+                    Ok(Entity::Usemtl { name: x.to_owned() })
                 } else {
-                    Err(Error::new(format!("could not parse line \"{}\"", token).as_ref()))
+                    Err(Error::new(
+                        format!("could not parse line \"{}\"", token).as_ref(),
+                    ))
                 }
-            },
-            _ => {
-                Err(Error::new(format!("unknown token \"{}\"", token).as_ref()))
             }
+            _ => Err(Error::new(format!("unknown token \"{}\"", token).as_ref())),
         }
     }
 
@@ -66,7 +59,7 @@ impl LineParser {
         let zs = split.next();
         let ws = split.next();
         if xs == None || ys == None || zs == None {
-            return Err(Error::new("invalid data for v"))
+            return Err(Error::new("invalid data for v"));
         }
         let x = xs.unwrap().parse::<f64>();
         let y = ys.unwrap().parse::<f64>();
@@ -74,14 +67,19 @@ impl LineParser {
         let w = match ws {
             Some(v) => match v.parse::<f64>() {
                 Ok(v) => Some(v),
-                Err(_) => return Err(Error::new("invalid data for v"))
-            }
+                Err(_) => return Err(Error::new("invalid data for v")),
+            },
             None => None,
         };
         if x.is_err() || y.is_err() || z.is_err() {
-            return Err(Error::new("invalid data for v"))
+            return Err(Error::new("invalid data for v"));
         }
-        Ok(Entity::Vertex{x: x.unwrap(), y: y.unwrap(), z: z.unwrap(), w})
+        Ok(Entity::Vertex {
+            x: x.unwrap(),
+            y: y.unwrap(),
+            z: z.unwrap(),
+            w,
+        })
     }
 
     fn parse_vt_vp(is_vt: bool, split: &mut std::str::SplitWhitespace) -> Result<Entity, Error> {
@@ -89,31 +87,39 @@ impl LineParser {
         let vs = split.next();
         let ws = split.next();
         if us == None {
-            return Err(Error::new("invalid data for vt"))
+            return Err(Error::new("invalid data for vt"));
         }
         let u = us.unwrap().parse::<f64>();
         let v = match vs {
             Some(v) => match v.parse::<f64>() {
                 Ok(v) => Some(v),
-                Err(_) => return Err(Error::new("invalid data for vt"))
-            }
+                Err(_) => return Err(Error::new("invalid data for vt")),
+            },
             None => None,
         };
         let w = match ws {
             Some(v) => match v.parse::<f64>() {
                 Ok(v) => Some(v),
-                Err(_) => return Err(Error::new("invalid data for vt"))
-            }
+                Err(_) => return Err(Error::new("invalid data for vt")),
+            },
             None => None,
         };
         if u.is_err() {
-            return Err(Error::new("invalid data for vt"))
+            return Err(Error::new("invalid data for vt"));
         }
 
         if is_vt {
-            Ok(Entity::VertexTexture{u: u.unwrap(), v, w})
+            Ok(Entity::VertexTexture {
+                u: u.unwrap(),
+                v,
+                w,
+            })
         } else {
-            Ok(Entity::VertexParameter{u: u.unwrap(), v, w})
+            Ok(Entity::VertexParameter {
+                u: u.unwrap(),
+                v,
+                w,
+            })
         }
     }
 
@@ -122,15 +128,19 @@ impl LineParser {
         let ys = split.next();
         let zs = split.next();
         if xs == None || ys == None || zs == None {
-            return Err(Error::new("invalid data for vn"))
+            return Err(Error::new("invalid data for vn"));
         }
         let x = xs.unwrap().parse::<f64>();
         let y = ys.unwrap().parse::<f64>();
         let z = zs.unwrap().parse::<f64>();
         if x.is_err() || y.is_err() || z.is_err() {
-            return Err(Error::new("invalid data for vn"))
+            return Err(Error::new("invalid data for vn"));
         }
-        Ok(Entity::VertexNormal{x: x.unwrap(), y: y.unwrap(), z: z.unwrap()})
+        Ok(Entity::VertexNormal {
+            x: x.unwrap(),
+            y: y.unwrap(),
+            z: z.unwrap(),
+        })
     }
 
     fn parse_face(split: &mut std::str::SplitWhitespace) -> Result<Entity, Error> {
@@ -155,7 +165,7 @@ impl LineParser {
                 return Err(Error::new("could not parse face"));
             }
         }
-        Ok(Entity::Face{vertices: face})
+        Ok(Entity::Face { vertices: face })
     }
 
     fn parse_polyline(split: &mut std::str::SplitWhitespace) -> Result<Entity, Error> {
@@ -163,6 +173,6 @@ impl LineParser {
         for x in split {
             vertices.push(x.parse::<i64>().unwrap())
         }
-        Ok(Entity::Line{vertices})
+        Ok(Entity::Line { vertices })
     }
 }
