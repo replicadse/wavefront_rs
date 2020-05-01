@@ -55,6 +55,19 @@ fn test_from_objformat_smoothing_group() {
 }
 
 #[test]
+fn test_into_format_merging_group() {
+    let entity = Entity::MergingGroup{name: "token".to_owned()};
+    assert_eq!("mg token", Into::<Format>::into(entity));
+}
+
+#[test]
+fn test_from_objformat_merging_group() {
+    assert_eq!(
+        Entity::from(Format::from("mg token")), 
+        Entity::MergingGroup{name: "token".to_owned()});
+}
+
+#[test]
 fn test_into_format_mtllib() {
     let entity = Entity::Mtllib{name: "token".to_owned()};
     assert_eq!("mtllib token", Into::<Format>::into(entity));
@@ -151,21 +164,21 @@ fn test_from_objformat_vertex_normal() {
 }
 
 #[test]
-fn test_into_format_vertex_texture_xy() {
+fn test_into_format_vertex_texture_u() {
     let entity = Entity::VertexTexture{
-        x: 0f64,
-        y: 1f64,
-        z: None,
+        u: 0f64,
+        v: None,
+        w: None,
     };
-    assert_eq!("vt 0 1", Into::<Format>::into(entity));
+    assert_eq!("vt 0", Into::<Format>::into(entity));
 }
 
 #[test]
-fn test_from_objformat_vertex_texture_xy() {
-    if let Entity::VertexTexture{x, y, z} = Entity::from(Format::from("vt 0.1 1.2")) {
-        assert!(approx_eq!(f64, 0.1, x, epsilon=1e-5));
-        assert!(approx_eq!(f64, 1.2, y, epsilon=1e-5));
-        assert_eq!(None, z);
+fn test_from_objformat_vertex_texture_u() {
+    if let Entity::VertexTexture{u, v, w} = Entity::from(Format::from("vt 0.1")) {
+        assert!(approx_eq!(f64, 0.1, u, epsilon=1e-5));
+        assert_eq!(None, v);
+        assert_eq!(None, w);
     }
     else {
         panic!()
@@ -173,21 +186,109 @@ fn test_from_objformat_vertex_texture_xy() {
 }
 
 #[test]
-fn test_into_format_vertex_texture_xyz() {
+fn test_into_format_vertex_texture_uv() {
     let entity = Entity::VertexTexture{
-        x: 0f64,
-        y: 1f64,
-        z: Some(2f64),
+        u: 0f64,
+        v: Some(1f64),
+        w: None,
+    };
+    assert_eq!("vt 0 1", Into::<Format>::into(entity));
+}
+
+#[test]
+fn test_from_objformat_vertex_texture_uv() {
+    if let Entity::VertexTexture{u, v, w} = Entity::from(Format::from("vt 0.1 1.2")) {
+        assert!(approx_eq!(f64, 0.1, u, epsilon=1e-5));
+        assert!(approx_eq!(f64, 1.2, v.unwrap(), epsilon=1e-5));
+        assert_eq!(None, w);
+    }
+    else {
+        panic!()
+    }
+}
+
+#[test]
+fn test_into_format_vertex_texture_uvw() {
+    let entity = Entity::VertexTexture{
+        u: 0f64,
+        v: Some(1f64),
+        w: Some(2f64),
     };
     assert_eq!("vt 0 1 2", Into::<Format>::into(entity));
 }
 
 #[test]
-fn test_from_objformat_vertex_texture_xyz() {
-    if let Entity::VertexTexture{x, y, z} = Entity::from(Format::from("vt 0.1 1.2 2.3")) {
-        assert!(approx_eq!(f64, 0.1, x, epsilon=1e-5));
-        assert!(approx_eq!(f64, 1.2, y, epsilon=1e-5));
-        assert!(approx_eq!(f64, 2.3, z.unwrap(), epsilon=1e-5));
+fn test_from_objformat_vertex_texture_uvw() {
+    if let Entity::VertexTexture{u, v, w} = Entity::from(Format::from("vt 0.1 1.2 2.3")) {
+        assert!(approx_eq!(f64, 0.1, u, epsilon=1e-5));
+        assert!(approx_eq!(f64, 1.2, v.unwrap(), epsilon=1e-5));
+        assert!(approx_eq!(f64, 2.3, w.unwrap(), epsilon=1e-5));
+    }
+    else {
+        panic!()
+    }
+}
+
+#[test]
+fn test_into_format_vertex_parameter_u() {
+    let entity = Entity::VertexParameter{
+        u: 0.1f64,
+        v: None,
+        w: None,
+    };
+    assert_eq!("vp 0.1", Into::<Format>::into(entity));
+}
+
+#[test]
+fn test_from_objformat_vertex_parameter_u() {
+    if let Entity::VertexParameter{u, v, w} = Entity::from(Format::from("vp 0.1")) {
+        assert!(approx_eq!(f64, 0.1, u, epsilon=1e-5));
+        assert_eq!(None, v);
+        assert_eq!(None, w);
+    }
+    else {
+        panic!()
+    }
+}
+
+#[test]
+fn test_into_format_vertex_parameter_uv() {
+    let entity = Entity::VertexParameter{
+        u: 0.1f64,
+        v: Some(1.2f64),
+        w: None,
+    };
+    assert_eq!("vp 0.1 1.2", Into::<Format>::into(entity));
+}
+
+#[test]
+fn test_from_objformat_vertex_parameter_uv() {
+    if let Entity::VertexParameter{u, v, w} = Entity::from(Format::from("vp 0.1 1.2")) {
+        assert!(approx_eq!(f64, 0.1, u, epsilon=1e-5));
+        assert!(approx_eq!(f64, 1.2, v.unwrap(), epsilon=1e-5));
+        assert_eq!(None, w);
+    }
+    else {
+        panic!()
+    }
+}
+
+#[test]
+fn test_into_format_vertex_parameter_uvw() {
+    let entity = Entity::VertexParameter{
+        u: 0.1f64,
+        v: Some(1.2f64),
+        w: Some(2.3f64),
+    };
+    assert_eq!("vp 0.1 1.2 2.3", Into::<Format>::into(entity));
+}
+
+#[test]
+fn test_from_objformat_vertex_parameter_uvw() {
+    if let Entity::VertexParameter{u, v, w} = Entity::from(Format::from("vp 0.1 1.2 2.3")) {
+        assert!(approx_eq!(f64, 0.1, u, epsilon=1e-5));
+        assert!(approx_eq!(f64, 1.2, v.unwrap(), epsilon=1e-5));
+        assert!(approx_eq!(f64, 2.3, w.unwrap(), epsilon=1e-5));
     }
     else {
         panic!()
@@ -379,6 +480,11 @@ fn test_token_smoothing_group() {
 }
 
 #[test]
+fn test_token_merging_group() {
+    assert_eq!("mg", Entity::MergingGroup{name: "".to_owned()}.token());
+}
+
+#[test]
 fn test_token_mtllib() {
     assert_eq!("mtllib", Entity::Mtllib{name: "".to_owned()}.token());
 }
@@ -400,7 +506,12 @@ fn test_token_vertex_normal() {
 
 #[test]
 fn test_token_vertex_texture() {
-    assert_eq!("vt", Entity::VertexTexture{x: 0f64, y: 0f64, z: None}.token());
+    assert_eq!("vt", Entity::VertexTexture{u: 0f64, v: None, w: None}.token());
+}
+
+#[test]
+fn test_token_vertex_parameter() {
+    assert_eq!("vp", Entity::VertexParameter{u: 0f64, v: None, w: None}.token());
 }
 
 #[test]
@@ -435,6 +546,12 @@ fn test_to_string_group() {
 fn test_to_string_smoothing_group() {
     let entity = Entity::SmoothingGroup{name: "token".to_owned()};
     assert_eq!("s token", entity.to_string());
+}
+
+#[test]
+fn test_to_string_merging_group() {
+    let entity = Entity::MergingGroup{name: "token".to_owned()};
+    assert_eq!("mg token", entity.to_string());
 }
 
 #[test]
@@ -482,23 +599,63 @@ fn test_to_string_vertex_normal() {
 }
 
 #[test]
-fn test_to_string_vertex_texture_xy() {
+fn test_to_string_vertex_texture_u() {
     let entity = Entity::VertexTexture{
-        x: 0f64,
-        y: 1f64,
-        z: None,
+        u: 0.1f64,
+        v: None,
+        w: None,
     };
-    assert_eq!("vt 0 1", entity.to_string());
+    assert_eq!("vt 0.1", entity.to_string());
 }
 
 #[test]
-fn test_to_string_vertex_texture_xyz() {
+fn test_to_string_vertex_texture_uv() {
     let entity = Entity::VertexTexture{
-        x: 0f64,
-        y: 1f64,
-        z: Some(2f64),
+        u: 0.1f64,
+        v: Some(1.2f64),
+        w: None,
+    };
+    assert_eq!("vt 0.1 1.2", entity.to_string());
+}
+
+#[test]
+fn test_to_string_vertex_texture_uvw() {
+    let entity = Entity::VertexTexture{
+        u: 0f64,
+        v: Some(1f64),
+        w: Some(2f64),
     };
     assert_eq!("vt 0 1 2", entity.to_string());
+}
+
+#[test]
+fn test_to_string_vertex_parameter_uvw() {
+    let entity = Entity::VertexParameter{
+        u: 0.1f64,
+        v: Some(1.2f64),
+        w: Some(2.3f64),
+    };
+    assert_eq!("vp 0.1 1.2 2.3", entity.to_string());
+}
+
+#[test]
+fn test_to_string_vertex_parameter_uv() {
+    let entity = Entity::VertexParameter{
+        u: 0.1f64,
+        v: Some(1.2f64),
+        w: None,
+    };
+    assert_eq!("vp 0.1 1.2", entity.to_string());
+}
+
+#[test]
+fn test_to_string_vertex_parameter_u() {
+    let entity = Entity::VertexParameter{
+        u: 0.1f64,
+        v: None,
+        w: None,
+    };
+    assert_eq!("vp 0.1", entity.to_string());
 }
 
 #[test]

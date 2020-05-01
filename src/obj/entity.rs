@@ -16,6 +16,7 @@ pub enum Entity {
     Object{name: String},
     Group{name: String},
     SmoothingGroup{name: String},
+    MergingGroup{name: String},
     Mtllib{name: String},
     Usemtl{name: String},
     /// Vertex consists of `x`, `y`, `z` and `w` whereas `w` is optional.\
@@ -28,7 +29,14 @@ pub enum Entity {
     /// VertexTexture consists of `x`, `y` and `z` whereas `z` is optional.\
     /// Example xyz: `v 0.1 1.2 2.3`\
     /// Example xy: `vt 0.1 1.2`
-    VertexTexture{x: f64, y: f64, z: Option<f64>},
+    VertexTexture{u: f64, v: Option<f64>, w: Option<f64>},
+    /// VertexParameter consists of `u`, `v` and `w` whereas `v` and `w` are optional.\
+    /// `u` is a 1D control point in the parameter space of a curve.\
+    /// `u + v` is a 2D control point in the parameter space of a surface.\
+    /// Control poins for non rational trimming curves require `u + v`.\
+    /// Control points for rational trimming curves require `u + v + w`.\
+    /// `w` defaults to 1.0 if not set.
+    VertexParameter{u: f64, v: Option<f64>, w: Option<f64>},
     /// Face consists of an arbitrary number (whereas n >= 3) of complex vertices that describe the polygon.\
     /// Example (vertex): `f 0 3 6`\
     /// Example (vertex+normal+texture): `f 0/1/2 3/4/5 6/7/8`\
@@ -46,11 +54,13 @@ impl Entity {
             Self::Object{..} => "o",
             Self::Group{..} => "g",
             Self::SmoothingGroup{..} => "s",
+            Self::MergingGroup{..} => "mg",
             Self::Mtllib{..} => "mtllib",
             Self::Usemtl{..} => "usemtl",
             Self::Vertex{..} => "v",
             Self::VertexNormal{..} => "vn",
             Self::VertexTexture{..} => "vt",
+            Self::VertexParameter{..} => "vp",
             Self::Face{..} => "f",
             Self::Line{..} => "l",
         }

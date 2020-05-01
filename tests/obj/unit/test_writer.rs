@@ -36,6 +36,14 @@ fn test_write_smoothing_group() {
 }
 
 #[test]
+fn test_write_merging_group() {
+    let entity = Entity::MergingGroup{name: "token".to_owned()};
+    let mut result = String::new();
+    FormatWriter::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity);
+    assert_eq!("mg token", result);
+}
+
+#[test]
 fn test_write_mtllib() {
     let entity = Entity::Mtllib{name: "token".to_owned()};
     let mut result = String::new();
@@ -90,27 +98,75 @@ fn test_write_vertex_normal() {
 }
 
 #[test]
-fn test_write_vertex_texture_xy() {
+fn test_write_vertex_texture_u() {
     let entity = Entity::VertexTexture{
-        x: 0f64,
-        y: 1f64,
-        z: None,
+        u: 0.1f64,
+        v: None,
+        w: None,
     };
     let mut result = String::new();
     FormatWriter::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity);
-    assert_eq!("vt 0 1", result);
+    assert_eq!("vt 0.1", result);
 }
 
 #[test]
-fn test_write_vertex_texture_xyz() {
+fn test_write_vertex_texture_uv() {
     let entity = Entity::VertexTexture{
-        x: 0f64,
-        y: 1f64,
-        z: Some(2f64),
+        u: 0.1f64,
+        v: Some(1.2f64),
+        w: None,
     };
     let mut result = String::new();
     FormatWriter::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity);
-    assert_eq!("vt 0 1 2", result);
+    assert_eq!("vt 0.1 1.2", result);
+}
+
+#[test]
+fn test_write_vertex_texture_uvw() {
+    let entity = Entity::VertexTexture{
+        u: 0.1f64,
+        v: Some(1.2f64),
+        w: Some(2.3f64),
+    };
+    let mut result = String::new();
+    FormatWriter::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity);
+    assert_eq!("vt 0.1 1.2 2.3", result);
+}
+
+#[test]
+fn test_write_vertex_parameter_uvw() {
+    let entity = Entity::VertexParameter{
+        u: 0.1f64,
+        v: Some(1.2f64),
+        w: Some(2.3f64),
+    };
+    let mut result = String::new();
+    FormatWriter::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity);
+    assert_eq!("vp 0.1 1.2 2.3", result);
+}
+
+#[test]
+fn test_write_vertex_parameter_uv() {
+    let entity = Entity::VertexParameter{
+        u: 0.1f64,
+        v: Some(1.2f64),
+        w: None,
+    };
+    let mut result = String::new();
+    FormatWriter::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity);
+    assert_eq!("vp 0.1 1.2", result);
+}
+
+#[test]
+fn test_write_vertex_parameter_u() {
+    let entity = Entity::VertexParameter{
+        u: 0.1f64,
+        v: None,
+        w: None,
+    };
+    let mut result = String::new();
+    FormatWriter::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity);
+    assert_eq!("vp 0.1", result);
 }
 
 #[test]

@@ -19,6 +19,9 @@ impl LineParser {
             "s" => {
                 Ok(Entity::SmoothingGroup{name: line.trim_start_matches("s ").to_owned()})
             }
+            "mg" => {
+                Ok(Entity::MergingGroup{name: line.trim_start_matches("mg ").to_owned()})
+            }
             "v" => {
                 Self::parse_v(split)
             }
@@ -26,7 +29,10 @@ impl LineParser {
                 Self::parse_vn(split)
             }
             "vt" => {
-                Self::parse_vt(split)
+                Self::parse_vt_vp(true, split)
+            }
+            "vp" => {
+                Self::parse_vt_vp(false, split)
             }
             "f" => {
                 Self::parse_face(split)
@@ -78,26 +84,37 @@ impl LineParser {
         Ok(Entity::Vertex{x: x.unwrap(), y: y.unwrap(), z: z.unwrap(), w})
     }
 
-    fn parse_vt(split: &mut std::str::SplitWhitespace) -> Result<Entity, Error> {
-        let xs = split.next();
-        let ys = split.next();
-        let zs = split.next();
-        if xs == None || ys == None {
+    fn parse_vt_vp(is_vt: bool, split: &mut std::str::SplitWhitespace) -> Result<Entity, Error> {
+        let us = split.next();
+        let vs = split.next();
+        let ws = split.next();
+        if us == None {
             return Err(Error::new("invalid data for vt"))
         }
-        let x = xs.unwrap().parse::<f64>();
-        let y = ys.unwrap().parse::<f64>();
-        let z = match zs {
+        let u = us.unwrap().parse::<f64>();
+        let v = match vs {
             Some(v) => match v.parse::<f64>() {
                 Ok(v) => Some(v),
                 Err(_) => return Err(Error::new("invalid data for vt"))
             }
             None => None,
         };
-        if x.is_err() || y.is_err() {
+        let w = match ws {
+            Some(v) => match v.parse::<f64>() {
+                Ok(v) => Some(v),
+                Err(_) => return Err(Error::new("invalid data for vt"))
+            }
+            None => None,
+        };
+        if u.is_err() {
             return Err(Error::new("invalid data for vt"))
         }
-        Ok(Entity::VertexTexture{x: x.unwrap(), y: y.unwrap(), z})
+
+        if is_vt {
+            Ok(Entity::VertexTexture{u: u.unwrap(), v, w})
+        } else {
+            Ok(Entity::VertexParameter{u: u.unwrap(), v, w})
+        }
     }
 
     fn parse_vn(split: &mut std::str::SplitWhitespace) -> Result<Entity, Error> {

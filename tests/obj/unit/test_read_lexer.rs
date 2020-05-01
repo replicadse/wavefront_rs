@@ -113,6 +113,33 @@ fn test_read_line_smoothing_group() {
 }
 
 #[test]
+fn test_read_to_end_merging_group() {
+    let stream = std::io::Cursor::new("mg token");
+    let exists = std::cell::Cell::new(false);
+    ReadLexer::read_to_end(&mut BufReader::new(stream), 
+        |x| {
+            if let Entity::MergingGroup{name} = x {
+                if name == "token" {
+                    exists.set(true);
+                }
+            }
+        }).unwrap();
+    assert_eq!(true, exists.take());
+}
+
+#[test]
+fn test_read_line_merging_group() {
+    let stream = std::io::Cursor::new("mg token");
+    let exists = std::cell::Cell::new(false);
+    if let Ok(Entity::MergingGroup{name}) = ReadLexer::read_line(&mut BufReader::new(stream)) {
+        if name == "token" {
+            exists.set(true);
+        }
+    }
+    assert_eq!(true, exists.take());
+}
+
+#[test]
 fn test_read_to_end_mtllib() {
     let stream = std::io::Cursor::new("mtllib token");
     let exists = std::cell::Cell::new(false);
@@ -258,15 +285,15 @@ fn test_read_line_vertex_normal() {
 }
 
 #[test]
-fn test_read_to_end_vertex_texture_xyz() {
+fn test_read_to_end_vertex_texture_uvw() {
     let stream = std::io::Cursor::new("vt 0.1 1.2 2.3");
     let exists = std::cell::Cell::new(false);
     ReadLexer::read_to_end(&mut BufReader::new(stream), 
         |v| {
-            if let Entity::VertexTexture{x, y, z} = v {
-                assert!(approx_eq!(f64, 0.1, x, epsilon=1e-5));
-                assert!(approx_eq!(f64, 1.2, y, epsilon=1e-5));
-                assert!(approx_eq!(f64, 2.3, z.unwrap(), epsilon=1e-5));
+            if let Entity::VertexTexture{u, v, w} = v {
+                assert!(approx_eq!(f64, 0.1, u, epsilon=1e-5));
+                assert!(approx_eq!(f64, 1.2, v.unwrap(), epsilon=1e-5));
+                assert!(approx_eq!(f64, 2.3, w.unwrap(), epsilon=1e-5));
                 exists.set(true);
             };
         }).unwrap();
@@ -274,28 +301,28 @@ fn test_read_to_end_vertex_texture_xyz() {
 }
 
 #[test]
-fn test_read_line_vertex_texture_xyz() {
+fn test_read_line_vertex_texture_uvw() {
     let stream = std::io::Cursor::new("vt 0.1 1.2 2.3");
     let exists = std::cell::Cell::new(false);
-    if let Ok(Entity::VertexTexture{x, y, z}) = ReadLexer::read_line(&mut BufReader::new(stream)) {
-        assert!(approx_eq!(f64, 0.1, x, epsilon=1e-5));
-        assert!(approx_eq!(f64, 1.2, y, epsilon=1e-5));
-        assert!(approx_eq!(f64, 2.3, z.unwrap(), epsilon=1e-5));
+    if let Ok(Entity::VertexTexture{u, v, w}) = ReadLexer::read_line(&mut BufReader::new(stream)) {
+        assert!(approx_eq!(f64, 0.1, u, epsilon=1e-5));
+        assert!(approx_eq!(f64, 1.2, v.unwrap(), epsilon=1e-5));
+        assert!(approx_eq!(f64, 2.3, w.unwrap(), epsilon=1e-5));
         exists.set(true);
     }
     assert_eq!(true, exists.take());
 }
 
 #[test]
-fn test_read_to_end_vertex_texture_xy() {
+fn test_read_to_end_vertex_texture_uv() {
     let stream = std::io::Cursor::new("vt 0.1 1.2");
     let exists = std::cell::Cell::new(false);
     ReadLexer::read_to_end(&mut BufReader::new(stream), 
         |v| {
-            if let Entity::VertexTexture{x, y, z} = v {
-                assert!(approx_eq!(f64, 0.1, x, epsilon=1e-5));
-                assert!(approx_eq!(f64, 1.2, y, epsilon=1e-5));
-                assert_eq!(None, z);
+            if let Entity::VertexTexture{u, v, w} = v {
+                assert!(approx_eq!(f64, 0.1, u, epsilon=1e-5));
+                assert!(approx_eq!(f64, 1.2, v.unwrap(), epsilon=1e-5));
+                assert_eq!(None, w);
                 exists.set(true);
             };
         }).unwrap();
@@ -303,16 +330,114 @@ fn test_read_to_end_vertex_texture_xy() {
 }
 
 #[test]
-fn test_read_line_vertex_texture_xy() {
+fn test_read_line_vertex_texture_uv() {
     let stream = std::io::Cursor::new("vt 0.1 1.2");
     let exists = std::cell::Cell::new(false);
-    if let Ok(Entity::VertexTexture{x, y, z}) = ReadLexer::read_line(&mut BufReader::new(stream)) {
-        assert!(approx_eq!(f64, 0.1, x, epsilon=1e-5));
-        assert!(approx_eq!(f64, 1.2, y, epsilon=1e-5));
-        assert_eq!(None, z);
+    if let Ok(Entity::VertexTexture{u, v, w}) = ReadLexer::read_line(&mut BufReader::new(stream)) {
+        assert!(approx_eq!(f64, 0.1, u, epsilon=1e-5));
+        assert!(approx_eq!(f64, 1.2, v.unwrap(), epsilon=1e-5));
+        assert_eq!(None, w);
         exists.set(true);
     }
     assert_eq!(true, exists.take());
+}
+
+#[test]
+fn test_read_to_end_vertex_texture_u() {
+    let stream = std::io::Cursor::new("vt 0.1");
+    let exists = std::cell::Cell::new(false);
+    ReadLexer::read_to_end(&mut BufReader::new(stream), 
+        |v| {
+            if let Entity::VertexTexture{u, v, w} = v {
+                assert!(approx_eq!(f64, 0.1, u, epsilon=1e-5));
+                assert_eq!(None, v);
+                assert_eq!(None, w);
+                exists.set(true);
+            };
+        }).unwrap();
+    assert_eq!(true, exists.take());
+}
+
+#[test]
+fn test_read_line_vertex_texture_u() {
+    let stream = std::io::Cursor::new("vt 0.1");
+    let exists = std::cell::Cell::new(false);
+    if let Ok(Entity::VertexTexture{u, v, w}) = ReadLexer::read_line(&mut BufReader::new(stream)) {
+        assert!(approx_eq!(f64, 0.1, u, epsilon=1e-5));
+        assert_eq!(None, v);
+        assert_eq!(None, w);
+        exists.set(true);
+    }
+    assert_eq!(true, exists.take());
+}
+
+#[test]
+fn test_read_to_end_vertex_parameter_uvw() {
+    let stream = std::io::Cursor::new("vp 0.1 1.2 2.3");
+    ReadLexer::read_to_end(&mut BufReader::new(stream), 
+        |v| {
+            assert_eq!(Entity::VertexParameter{
+                u: 0.1f64,
+                v: Some(1.2f64),
+                w: Some(2.3f64),
+            }, v);
+        }).unwrap();
+}
+
+#[test]
+fn test_read_line_vertex_parameter_uvw() {
+    let stream = std::io::Cursor::new("vp 0.1 1.2 2.3");
+    assert_eq!(Entity::VertexParameter{
+        u: 0.1f64,
+        v: Some(1.2f64),
+        w: Some(2.3f64),
+    }, ReadLexer::read_line(&mut BufReader::new(stream)).unwrap());
+}
+
+#[test]
+fn test_read_to_end_vertex_parameter_uv() {
+    let stream = std::io::Cursor::new("vp 0.1 1.2");
+    ReadLexer::read_to_end(&mut BufReader::new(stream), 
+        |v| {
+            assert_eq!(Entity::VertexParameter{
+                u: 0.1f64,
+                v: Some(1.2f64),
+                w: None,
+            }, v);
+        }).unwrap();
+}
+
+#[test]
+fn test_read_line_vertex_parameter_uv() {
+    let stream = std::io::Cursor::new("vp 0.1 1.2");
+    assert_eq!(Entity::VertexParameter{
+        u: 0.1f64,
+        v: Some(1.2f64),
+        w: None,
+    }, ReadLexer::read_line(&mut BufReader::new(stream)).unwrap());
+}
+
+#[test]
+fn test_read_to_end_vertex_parameter_u() {
+    let stream = std::io::Cursor::new("vp 0.1");
+    ReadLexer::read_to_end(&mut BufReader::new(stream), 
+        |v| {
+            assert_eq!(Entity::VertexParameter{
+                u: 0.1f64,
+                v: None,
+                w: None,
+            }, v);
+        }).unwrap();
+}
+
+#[test]
+fn test_read_line_vertex_parameter_u() {
+    let stream = std::io::Cursor::new("vp 0.1");
+    assert_eq!(Entity::VertexParameter{
+        u: 0.1f64,
+        v: None,
+        w: None,
+    }, ReadLexer::read_line(&mut BufReader::new(stream)).unwrap());
 }
 
 #[test]

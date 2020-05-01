@@ -48,6 +48,17 @@ fn test_read_line_smoothing_group() {
 }
 
 #[test]
+fn test_read_line_merging_group() {
+    let exists = std::cell::Cell::new(false);
+    if let Ok(Entity::MergingGroup{name}) = StringLexer::read_line("mg token") {
+        if name == "token" {
+            exists.set(true);
+        }
+    }
+    assert_eq!(true, exists.take());
+}
+
+#[test]
 fn test_read_line_mtllib() {
     let exists = std::cell::Cell::new(false);
     if let Ok(Entity::Mtllib{name}) = StringLexer::read_line("mtllib token") {
@@ -108,27 +119,67 @@ fn test_read_line_vertex_normal() {
 }
 
 #[test]
-fn test_read_line_vertex_texture_xyz() {
+fn test_read_line_vertex_texture_uvw() {
     let exists = std::cell::Cell::new(false);
-    if let Ok(Entity::VertexTexture{x, y, z}) = StringLexer::read_line("vt 0.1 1.2 2.3") {
-        assert!(approx_eq!(f64, 0.1, x, epsilon=1e-5));
-        assert!(approx_eq!(f64, 1.2, y, epsilon=1e-5));
-        assert!(approx_eq!(f64, 2.3, z.unwrap(), epsilon=1e-5));
+    if let Ok(Entity::VertexTexture{u, v, w}) = StringLexer::read_line("vt 0.1 1.2 2.3") {
+        assert!(approx_eq!(f64, 0.1, u, epsilon=1e-5));
+        assert!(approx_eq!(f64, 1.2, v.unwrap(), epsilon=1e-5));
+        assert!(approx_eq!(f64, 2.3, w.unwrap(), epsilon=1e-5));
         exists.set(true);
     }
     assert_eq!(true, exists.take());
 }
 
 #[test]
-fn test_read_line_vertex_texture_xy() {
+fn test_read_line_vertex_texture_uv() {
     let exists = std::cell::Cell::new(false);
-    if let Ok(Entity::VertexTexture{x, y, z}) = StringLexer::read_line("vt 0.1 1.2") {
-        assert!(approx_eq!(f64, 0.1, x, epsilon=1e-5));
-        assert!(approx_eq!(f64, 1.2, y, epsilon=1e-5));
-        assert_eq!(None, z);
+    if let Ok(Entity::VertexTexture{u, v, w}) = StringLexer::read_line("vt 0.1 1.2") {
+        assert!(approx_eq!(f64, 0.1, u, epsilon=1e-5));
+        assert!(approx_eq!(f64, 1.2, v.unwrap(), epsilon=1e-5));
+        assert_eq!(None, w);
         exists.set(true);
     }
     assert_eq!(true, exists.take());
+}
+
+#[test]
+fn test_read_line_vertex_texture_u() {
+    let exists = std::cell::Cell::new(false);
+    if let Ok(Entity::VertexTexture{u, v, w}) = StringLexer::read_line("vt 0.1") {
+        assert!(approx_eq!(f64, 0.1, u, epsilon=1e-5));
+        assert_eq!(None, v);
+        assert_eq!(None, w);
+        exists.set(true);
+    }
+    assert_eq!(true, exists.take());
+}
+
+
+#[test]
+fn test_read_line_vertex_parameter_uvw() {
+    assert_eq!(Entity::VertexParameter{
+        u: 0.1f64,
+        v: Some(1.2f64),
+        w: Some(2.3f64),
+    }, StringLexer::read_line("vp 0.1 1.2 2.3").unwrap());
+}
+
+#[test]
+fn test_read_line_vertex_parameter_uv() {
+    assert_eq!(Entity::VertexParameter{
+        u: 0.1f64,
+        v: Some(1.2f64),
+        w: None,
+    }, StringLexer::read_line("vp 0.1 1.2").unwrap());
+}
+
+#[test]
+fn test_read_line_vertex_parameter_u() {
+    assert_eq!(Entity::VertexParameter{
+        u: 0.1f64,
+        v: None,
+        w: None,
+    }, StringLexer::read_line("vp 0.1").unwrap());
 }
 
 #[test]

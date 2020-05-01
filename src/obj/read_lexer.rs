@@ -8,7 +8,6 @@ use std::io::BufRead;
 use crate::error::Error;
 
 /// Will read from a given `BufRead` and parse entities.
-#[derive(Default)]
 pub struct ReadLexer {
 }
 
