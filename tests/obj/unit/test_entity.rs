@@ -343,18 +343,14 @@ fn test_into_format_face_vnt_3() {
 
 #[test]
 fn test_from_objformat_face_vnt_3() {
-    if let Entity::Face { vertices } = Entity::from(Format::from("f 0/1/2 3/4/5 6/7/8")) {
-        assert_eq!(
-            vec!(
-                FaceVertex::new2(0, Some(1), Some(2)),
-                FaceVertex::new2(3, Some(4), Some(5)),
-                FaceVertex::new2(6, Some(7), Some(8)),
-            ),
-            vertices
-        );
-    } else {
-        panic!()
-    }
+    assert_eq!(
+        Entity::Face {vertices: vec!(
+            FaceVertex::new2(0, Some(1), Some(2)),
+            FaceVertex::new2(3, Some(4), Some(5)),
+            FaceVertex::new2(6, Some(7), Some(8)),
+        )},
+        Entity::from(Format::from("f 0/1/2 3/4/5 6/7/8"))
+    );
 }
 
 #[test]
@@ -376,24 +372,17 @@ fn test_into_format_face_vnt_6() {
 }
 
 #[test]
-fn test_from_objformat_face_vnt_6() {
-    if let Entity::Face { vertices } = Entity::from(Format::from(
-        "f 0/1/2 3/4/5 6/7/8 9/10/11 12/13/14 15/16/17",
-    )) {
-        assert_eq!(
-            vec!(
-                FaceVertex::new2(0, Some(1), Some(2)),
-                FaceVertex::new2(3, Some(4), Some(5)),
-                FaceVertex::new2(6, Some(7), Some(8)),
-                FaceVertex::new2(9, Some(10), Some(11)),
-                FaceVertex::new2(12, Some(13), Some(14)),
-                FaceVertex::new2(15, Some(16), Some(17)),
-            ),
-            vertices
-        );
-    } else {
-        panic!()
-    }
+fn test_from_objformat_face_vnt_5() {
+    assert_eq!(
+        Entity::Face {vertices: vec!(
+            FaceVertex::new2(0, Some(1), Some(2)),
+            FaceVertex::new2(3, Some(4), Some(5)),
+            FaceVertex::new2(6, Some(7), Some(8)),
+            FaceVertex::new2(9, Some(10), Some(11)),
+            FaceVertex::new2(12, Some(13), Some(14)),
+        )},
+        Entity::from(Format::from("f 0/1/2 3/4/5 6/7/8 9/10/11 12/13/14"))
+    );
 }
 
 #[test]
@@ -410,18 +399,14 @@ fn test_into_format_face_vt() {
 
 #[test]
 fn test_from_objformat_face_vt() {
-    if let Entity::Face { vertices } = Entity::from(Format::from("f 0//2 3//5 6//8")) {
-        assert_eq!(
-            vec!(
-                FaceVertex::new2(0, None, Some(2)),
-                FaceVertex::new2(3, None, Some(5)),
-                FaceVertex::new2(6, None, Some(8)),
-            ),
-            vertices
-        );
-    } else {
-        panic!()
-    }
+    assert_eq!(
+        Entity::Face {vertices: vec!(
+            FaceVertex::new2(0, None, Some(2)),
+            FaceVertex::new2(3, None, Some(5)),
+            FaceVertex::new2(6, None, Some(8)),
+        )},
+        Entity::from(Format::from("f 0//2 3//5 6//8"))
+    );
 }
 
 #[test]
@@ -438,18 +423,14 @@ fn test_into_format_face_vn() {
 
 #[test]
 fn test_from_objformat_face_vn() {
-    if let Entity::Face { vertices } = Entity::from(Format::from("f 0/1 3/4 6/7")) {
-        assert_eq!(
-            vec!(
-                FaceVertex::new2(0, Some(1), None),
-                FaceVertex::new2(3, Some(4), None),
-                FaceVertex::new2(6, Some(7), None),
-            ),
-            vertices
-        );
-    } else {
-        panic!()
-    }
+    assert_eq!(
+        Entity::Face {vertices: vec!(
+            FaceVertex::new2(0, Some(1), None),
+            FaceVertex::new2(3, Some(4), None),
+            FaceVertex::new2(6, Some(7), None),
+        )},
+        Entity::from(Format::from("f 0/1 3/4 6/7"))
+    );
 }
 
 #[test]
@@ -466,18 +447,14 @@ fn test_into_format_face_v() {
 
 #[test]
 fn test_from_objformat_face_v() {
-    if let Entity::Face { vertices } = Entity::from(Format::from("f 0 3 6")) {
-        assert_eq!(
-            vec!(
-                FaceVertex::new2(0, None, None),
-                FaceVertex::new2(3, None, None),
-                FaceVertex::new2(6, None, None),
-            ),
-            vertices
-        );
-    } else {
-        panic!()
-    }
+    assert_eq!(
+        Entity::Face {vertices: vec!(
+            FaceVertex::new2(0, None, None),
+            FaceVertex::new2(3, None, None),
+            FaceVertex::new2(6, None, None),
+        )},
+        Entity::from(Format::from("f 0 3 6"))
+    );
 }
 
 #[test]
@@ -490,11 +467,10 @@ fn test_into_format_line() {
 
 #[test]
 fn test_from_objformat_line() {
-    if let Entity::Line { vertices } = Entity::from(Format::from("l 0 1 2 3 4")) {
-        assert_eq!(vec!(0, 1, 2, 3, 4), vertices);
-    } else {
-        panic!()
-    }
+    assert_eq!(
+        Entity::Line {vertices: vec!(0, 1, 2, 3,4 )},
+        Entity::from(Format::from("l 0 1 2 3 4"))
+    );
 }
 
 #[test]
