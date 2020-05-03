@@ -42,27 +42,31 @@ pub enum Entity {
         z: f64,
         w: Option<f64>,
     },
-    /// VertexNormal consists of `x`, `y`and `z`. The normal will usually but is not required to be a unit vector.
+    /// VertexNormal consists of `x`, `y`and `z`. The normal will usually but is not required to be a unit vector.\
     /// Example: `vn 0.1 1.2 2.3`
     VertexNormal {
         x: f64,
         y: f64,
         z: f64,
     },
-    /// VertexTexture consists of `x`, `y` and `z` whereas `z` is optional.\
-    /// Example xyz: `v 0.1 1.2 2.3`\
-    /// Example xy: `vt 0.1 1.2`
+    /// VertexTexture consists of `u`, `v` and `w` whereas `u` and `w` are optional.\
+    /// Example uvw: `vt 0.1 1.2 2.3`\
+    /// Example uv: `vt 0.1 1.2`\
+    /// Example u: `vt 0.1`
     VertexTexture {
         u: f64,
         v: Option<f64>,
         w: Option<f64>,
     },
     /// VertexParameter consists of `u`, `v` and `w` whereas `v` and `w` are optional.\
-    /// `u` is a 1D control point in the parameter space of a curve.\
+    /// `u` is a 1D control point in the parameter space of a curve.
     /// `u + v` is a 2D control point in the parameter space of a surface.\
     /// Control poins for non rational trimming curves require `u + v`.\
     /// Control points for rational trimming curves require `u + v + w`.\
-    /// `w` defaults to 1.0 if not set.
+    /// `w` defaults to 1.0 if not set.\
+    /// Example uvw: `vp 0.1 1.2 2.3`\
+    /// Example uv: `vp 0.1 1.2`\
+    /// Example u: `vp 0.1`
     VertexParameter {
         u: f64,
         v: Option<f64>,
