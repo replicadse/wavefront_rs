@@ -72,6 +72,16 @@ pub enum Entity {
         v: Option<f64>,
         w: Option<f64>,
     },
+    /// The point entity contains a list of points in space.\
+    /// Example (3 points): `p 0 1 2`\
+    /// Example (1 point): `p 0`
+    Point {
+        vertices: Vec<i64>,
+    },
+    /// Line consists of an arbitrary number (whereas n >= 2) of vertices that describe the path.
+    Line {
+        vertices: Vec<i64>,
+    },
     /// Face consists of an arbitrary number (whereas n >= 3) of complex vertices that describe the polygon.\
     /// Example (vertex): `f 0 3 6`\
     /// Example (vertex+normal+texture): `f 0/1/2 3/4/5 6/7/8`\
@@ -79,10 +89,6 @@ pub enum Entity {
     /// Example (vertex+texture): `f 0//2 3//5 6//8`
     Face {
         vertices: Vec<FaceVertex>,
-    },
-    /// Line consists of an arbitrary number (whereas n >= 2) of vertices that describe the path.
-    Line {
-        vertices: Vec<i64>,
     },
 }
 
@@ -100,8 +106,9 @@ impl Entity {
             Self::VertexNormal { .. } => "vn",
             Self::VertexTexture { .. } => "vt",
             Self::VertexParameter { .. } => "vp",
-            Self::Face { .. } => "f",
+            Self::Point { .. } => "p",
             Self::Line { .. } => "l",
+            Self::Face { .. } => "f",
         }
     }
 }

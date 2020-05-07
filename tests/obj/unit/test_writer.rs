@@ -265,3 +265,13 @@ fn test_write_line() {
     FormatWriter::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity);
     assert_eq!("l 0 1 2 3 4", result);
 }
+
+#[test]
+fn test_write_point() {
+    let entity = Entity::Point {
+        vertices: vec![0, 1, 2, 3, 4],
+    };
+    let mut result = String::new();
+    FormatWriter::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity);
+    assert_eq!("p 0 1 2 3 4", result);
+}

@@ -270,3 +270,13 @@ fn test_read_line_line() {
         StringLexer::read_line("l 0 1 2 3 4").unwrap()
     );
 }
+
+#[test]
+fn test_read_line_point() {
+    assert_eq!(
+        Entity::Point {
+            vertices: vec!(0, 1, 2, 3, 4)
+        },
+        StringLexer::read_line("p 0 1 2 3 4").unwrap()
+    );
+}

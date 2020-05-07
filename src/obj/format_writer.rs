@@ -32,8 +32,14 @@ impl FormatWriter {
                     }
                 }
             }
+            Entity::Point { vertices } => {
+                writer.write_all(e.token().as_ref()).unwrap();
+                for v in vertices {
+                    writer.write_all(format!(" {}", v).as_ref()).unwrap();
+                }
+            }
             Entity::Line { vertices } => {
-                writer.write_all(e.token().as_ref()).as_ref().unwrap();
+                writer.write_all(e.token().as_ref()).unwrap();
                 for v in vertices {
                     writer.write_all(format!(" {}", v).as_ref()).unwrap();
                 }

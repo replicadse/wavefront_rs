@@ -702,3 +702,31 @@ fn test_read_line_line() {
         ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }
+
+#[test]
+fn test_read_to_end_point() {
+    let stream = std::io::Cursor::new("p 0 1 2 3 4");
+    let exists = std::cell::Cell::new(false);
+    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+        assert_eq!(
+            Entity::Point {
+                vertices: vec!(0, 1, 2, 3, 4)
+            },
+            x
+        );
+        exists.set(true);
+    })
+    .unwrap();
+    assert_eq!(true, exists.take());
+}
+
+#[test]
+fn test_read_line_point() {
+    let stream = std::io::Cursor::new("p 0 1 2 3 4");
+    assert_eq!(
+        Entity::Point {
+            vertices: vec!(0, 1, 2, 3, 4)
+        },
+        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+    );
+}

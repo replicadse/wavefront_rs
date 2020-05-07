@@ -486,6 +486,24 @@ fn test_from_objformat_line() {
 }
 
 #[test]
+fn test_into_format_point() {
+    let entity = Entity::Point {
+        vertices: vec![0, 1, 2, 3, 4],
+    };
+    assert_eq!("p 0 1 2 3 4", Into::<Format>::into(entity));
+}
+
+#[test]
+fn test_from_objformat_point() {
+    assert_eq!(
+        Entity::Point {
+            vertices: vec!(0, 1, 2, 3, 4)
+        },
+        Entity::from(Format::from("p 0 1 2 3 4"))
+    );
+}
+
+#[test]
 fn test_token_comment() {
     assert_eq!(
         "#",
@@ -623,6 +641,11 @@ fn test_token_face() {
 #[test]
 fn test_token_line() {
     assert_eq!("l", Entity::Line { vertices: vec!() }.token());
+}
+
+#[test]
+fn test_token_point() {
+    assert_eq!("p", Entity::Point { vertices: vec!() }.token());
 }
 
 #[test]
@@ -845,4 +868,12 @@ fn test_to_string_line() {
         vertices: vec![0, 1, 2, 3, 4],
     };
     assert_eq!("l 0 1 2 3 4", entity.to_string());
+}
+
+#[test]
+fn test_to_string_point() {
+    let entity = Entity::Point {
+        vertices: vec![0, 1, 2, 3, 4],
+    };
+    assert_eq!("p 0 1 2 3 4", entity.to_string());
 }

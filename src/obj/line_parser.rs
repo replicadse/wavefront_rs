@@ -31,6 +31,7 @@ impl LineParser {
             "vp" => Self::parse_vt_vp(false, split),
             "f" => Self::parse_face(split),
             "l" => Self::parse_polyline(split),
+            "p" => Self::parse_point(split),
             "mtllib" => {
                 if let Some(x) = split.next() {
                     Ok(Entity::Mtllib { name: x.to_owned() })
@@ -174,5 +175,13 @@ impl LineParser {
             vertices.push(x.parse::<i64>().unwrap())
         }
         Ok(Entity::Line { vertices })
+    }
+
+    fn parse_point(split: &mut std::str::SplitWhitespace) -> Result<Entity, Error> {
+        let mut vertices = Vec::new();
+        for x in split {
+            vertices.push(x.parse::<i64>().unwrap())
+        }
+        Ok(Entity::Point { vertices })
     }
 }
