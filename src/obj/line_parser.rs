@@ -88,25 +88,26 @@ impl LineParser {
         let vs = split.next();
         let ws = split.next();
         if us == None {
-            return Err(Error::new("invalid data for vt"));
+            return Err(Error::new(format!("invalid data for {}", if is_vt { "vt" } else { "vp" }).as_ref()));
         }
         let u = us.unwrap().parse::<f64>();
         let v = match vs {
             Some(v) => match v.parse::<f64>() {
                 Ok(v) => Some(v),
-                Err(_) => return Err(Error::new("invalid data for vt")),
+                Err(_) => return Err(
+                    Error::new(format!("invalid data for {}", if is_vt { "vt" } else { "vp" }).as_ref()))
             },
             None => None,
         };
         let w = match ws {
             Some(v) => match v.parse::<f64>() {
                 Ok(v) => Some(v),
-                Err(_) => return Err(Error::new("invalid data for vt")),
+                Err(_) => return Err(Error::new(format!("invalid data for {}", if is_vt { "vt" } else { "vp" }).as_ref()))
             },
             None => None,
         };
         if u.is_err() {
-            return Err(Error::new("invalid data for vt"));
+            return Err(Error::new(format!("invalid data for {}", if is_vt { "vt" } else { "vp" }).as_ref()));
         }
 
         if is_vt {
