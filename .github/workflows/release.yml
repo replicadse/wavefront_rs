@@ -56,7 +56,10 @@ jobs:
 
   tag:
     if: github.ref == 'refs/heads/master'
-    needs: test
+    needs:
+      - scan
+      - test
+      - build
     name: tag and release
     runs-on: ubuntu-latest
     steps:
@@ -82,9 +85,7 @@ jobs:
 
   publish-cratesio:
     needs:
-      - scan
-      - test
-      - build
+      - tag
     name: crates.io
     runs-on: ubuntu-latest
     steps:
