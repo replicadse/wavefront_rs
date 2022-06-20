@@ -1,7 +1,7 @@
 [package]
 name = "wavefront_rs"
 version = "0.0.0"
-authors = ["Heiko Alexander Weber <heiko.a.weber@gmail.com>"]
+authors = ["Alexander Weber <aw@voidpointergroup.com>"]
 edition = "2018"
 license = "MIT"
 description = "Typed Wavefront OBJ parser / writer."
@@ -10,7 +10,6 @@ homepage = "https://replicadse.github.io/wavefront_rs/"
 repository = "https://github.com/replicadse/wavefront_rs"
 keywords = ["wavefront", "obj", "mtl"]
 categories = ["parser-implementations", "encoding", "graphics"]
-
 
 [profile]
   [dev]
