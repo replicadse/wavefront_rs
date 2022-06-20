@@ -6,9 +6,6 @@ on:
         description: 'version number'
         required: true
 
-env:
-  RELEASE_FILE: RELEASE.txt
-
 jobs:
   scan:
     name: scan
@@ -76,12 +73,6 @@ jobs:
           Release ${{ github.event.inputs.version }}.
         draft: false
         prerelease: false
-    - run: printf ${{ steps.create_release.outputs.upload_url }} > ${{ env.RELEASE_FILE }}
-    - name: upload release data
-      uses: actions/upload-artifact@v1.0.0
-      with:
-        name: RELEASE
-        path: ${{ env.RELEASE_FILE }}
 
   publish-cratesio:
     needs:
@@ -90,9 +81,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: get version
-      id: get_version
-      run: echo ::set-output name=VERSION::$(git tag --points-at HEAD --sort -version:refname | head -1)
     - name: install tools
       run: |
         sudo apt-get install build-essential
@@ -101,6 +89,6 @@ jobs:
     - name: publish
       id: publish
       run: |
-        invoke ci.update-version --version=${{ steps.get_version.outputs.VERSION }}
+        invoke ci.update-version --version=${{ github.event.inputs.version }}
         cargo login ${{ secrets.CRATES_IO_TOKEN }}
         cargo publish --allow-dirty
