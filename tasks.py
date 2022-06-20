@@ -29,8 +29,6 @@ def task_other_installhooks(c):
 def task_ci_updateversion(c, version):
     c.run(f'''sed 's/version = "0.0.0"/version = "'{version}'"/g' Cargo.toml > Cargo.toml.tmp''')
     c.run('mv Cargo.toml.tmp Cargo.toml')
-    c.run(f'''sed 's/pkgver=0.0.0/pkgver='{version}'/g' pkg/aur/PKGBUILD > pkg/aur/PKGBUILD.tmp''')
-    c.run('mv pkg/aur/PKGBUILD.tmp pkg/aur/PKGBUILD')
 
 ns = Collection()
 
