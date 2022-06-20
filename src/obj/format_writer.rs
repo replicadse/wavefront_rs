@@ -21,15 +21,17 @@ impl FormatWriter {
                 for v in vertices {
                     writer.write_all(" ".as_ref()).unwrap();
                     writer.write_all(format!("{}", v.vertex).as_ref()).unwrap();
-                    if let Some(x) = v.normal {
-                        writer.write_all(format!("/{}", x).as_ref()).unwrap();
-                    }
                     if let Some(x) = v.texture {
                         if v.normal.is_none() {
                             writer.write_all("/".as_ref()).unwrap();
                         }
                         writer.write_all(format!("/{}", x).as_ref()).unwrap();
+                    } else {
+                        writer.write_all("/".as_ref()).unwrap();
                     }
+                    if let Some(x) = v.normal {
+                        writer.write_all(format!("/{}", x).as_ref()).unwrap();
+                    } 
                 }
             }
             Entity::Point { vertices } => {
