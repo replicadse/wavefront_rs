@@ -25,10 +25,19 @@ impl FormatWriter {
                         writer.write_all(format!("/{}", x).as_ref()).unwrap();
                     }
                     if let Some(x) = v.normal {
-                        writer.write_all(format!("{}{}", match v.texture {
-                            None => "//",
-                            Some(_) => "/",
-                        }, x).as_ref()).unwrap();
+                        writer
+                            .write_all(
+                                format!(
+                                    "{}{}",
+                                    match v.texture {
+                                        None => "//",
+                                        Some(_) => "/",
+                                    },
+                                    x
+                                )
+                                .as_ref(),
+                            )
+                            .unwrap();
                     }
                 }
             }

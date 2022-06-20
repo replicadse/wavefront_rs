@@ -133,7 +133,8 @@ impl FaceVertex {
         }
     }
 
-    // TODO(aw, minor, 7): Remove in 2.0.0
+    // TODO(aw, minor, 8): Remove in 2.0.0
+    #[deprecated(since = "1.0.4", note = "use FaceVertex::new_vtn")]
     pub fn new2(vertex: i64, normal: Option<i64>, texture: Option<i64>) -> Self {
         Self {
             vertex,
@@ -154,7 +155,7 @@ impl FaceVertex {
 impl ToString for Entity {
     fn to_string(&self) -> String {
         let mut result = String::new();
-        FormatWriter::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &self);
+        FormatWriter::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), self);
         result
     }
 }

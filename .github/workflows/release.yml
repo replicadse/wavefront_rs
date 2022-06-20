@@ -15,12 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Check formatting
+    - name: check formatting
       run: cargo fmt --all -- --check
-    - name: Scan code
-      run: |
-        rustup component add clippy
-        cargo clippy --all-targets --all-features -- -D warnings
+    # - name: scan code
+    #   run: |
+    #     rustup component add clippy
+    #     cargo clippy --all-targets --all-features -- -D warnings
   test:
     name: test (${{ matrix.name }})
     runs-on: ubuntu-latest
@@ -56,7 +56,7 @@ jobs:
 
   tag:
     if: github.ref == 'refs/heads/master'
-    needs: check
+    needs: test
     name: tag and release
     runs-on: ubuntu-latest
     steps:
@@ -81,7 +81,10 @@ jobs:
         path: ${{ env.RELEASE_FILE }}
 
   publish-cratesio:
-    needs: tag
+    needs:
+      - scan
+      - test
+      - build
     name: crates.io
     runs-on: ubuntu-latest
     steps:
