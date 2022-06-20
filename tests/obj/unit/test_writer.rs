@@ -184,7 +184,7 @@ fn test_write_vertex_parameter_u() {
 }
 
 #[test]
-fn test_write_face_vnt_3() {
+fn test_write_face_vtn_3() {
     let entity = Entity::Face {
         vertices: vec![
             FaceVertex::new2(0, Some(1), Some(2)),
@@ -198,7 +198,7 @@ fn test_write_face_vnt_3() {
 }
 
 #[test]
-fn test_write_face_vnt_6() {
+fn test_write_face_vtn_6() {
     let entity = Entity::Face {
         vertices: vec![
             FaceVertex::new2(0, Some(1), Some(2)),
@@ -218,20 +218,6 @@ fn test_write_face_vnt_6() {
 fn test_write_face_vt() {
     let entity = Entity::Face {
         vertices: vec![
-            FaceVertex::new2(0, None, Some(2)),
-            FaceVertex::new2(3, None, Some(5)),
-            FaceVertex::new2(6, None, Some(8)),
-        ],
-    };
-    let mut result = String::new();
-    FormatWriter::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity);
-    assert_eq!("f 0//2 3//5 6//8", result);
-}
-
-#[test]
-fn test_write_face_vn() {
-    let entity = Entity::Face {
-        vertices: vec![
             FaceVertex::new2(0, Some(1), None),
             FaceVertex::new2(3, Some(4), None),
             FaceVertex::new2(6, Some(7), None),
@@ -240,6 +226,20 @@ fn test_write_face_vn() {
     let mut result = String::new();
     FormatWriter::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity);
     assert_eq!("f 0/1 3/4 6/7", result);
+}
+
+#[test]
+fn test_write_face_vn() {
+    let entity = Entity::Face {
+        vertices: vec![
+            FaceVertex::new2(0, None, Some(2)),
+            FaceVertex::new2(3, None, Some(5)),
+            FaceVertex::new2(6, None, Some(8)),
+        ],
+    };
+    let mut result = String::new();
+    FormatWriter::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity);
+    assert_eq!("f 0//2 3//5 6//8", result);
 }
 
 #[test]

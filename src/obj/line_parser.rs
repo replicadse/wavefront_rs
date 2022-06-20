@@ -158,19 +158,19 @@ impl LineParser {
 
     fn parse_face(split: &mut std::str::SplitWhitespace) -> Result<Entity, Error> {
         let mut face = Vec::new();
-        for vnt in split {
-            let mut vnts = vnt.split('/');
-            if let Some(v) = vnts.next() {
+        for vtn in split {
+            let mut vtns = vtn.split('/');
+            if let Some(v) = vtns.next() {
                 let v_parsed = v.parse::<i64>().unwrap();
                 let mut vertex = FaceVertex::new(v_parsed);
-                if let Some(vn) = vnts.next() {
-                    if vn != "" {
-                        vertex.normal = Some(vn.parse::<i64>().unwrap());
+                if let Some(vt) = vtns.next() {
+                    if !vt.is_empty() {
+                        vertex.texture = Some(vt.parse::<i64>().unwrap());
                     }
                 }
-                if let Some(vt) = vnts.next() {
-                    if vt != "" {
-                        vertex.texture = Some(vt.parse::<i64>().unwrap());
+                if let Some(vn) = vtns.next() {
+                    if !vn.is_empty() {
+                        vertex.normal = Some(vn.parse::<i64>().unwrap());
                     }
                 }
                 face.push(vertex);
