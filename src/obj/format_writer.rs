@@ -31,7 +31,7 @@ impl FormatWriter {
                     }
                     if let Some(x) = v.normal {
                         writer.write_all(format!("/{}", x).as_ref()).unwrap();
-                    } 
+                    }
                 }
             }
             Entity::Point { vertices } => {

@@ -14,7 +14,10 @@ impl ReadLexer {
     /// Will read from the given `BufRead`as long as it is not EOF.\
     /// When an entity is parsed, the given callback is invoked and the entity is inserted into it as parameter.\
     /// Will return `Ok(())` if successful or an `Error` (if parsing failed).
-    pub fn read_to_end<R: BufRead>(reader: &mut R, mut callback: impl FnMut(Entity)) -> Result<(), Error> {
+    pub fn read_to_end<R: BufRead>(
+        reader: &mut R,
+        mut callback: impl FnMut(Entity),
+    ) -> Result<(), Error> {
         for l in reader.lines() {
             let s: String = l?;
             let mut split = s.split_whitespace();
