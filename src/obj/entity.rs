@@ -133,7 +133,16 @@ impl FaceVertex {
         }
     }
 
-    pub fn new2(vertex: i64, texture: Option<i64>, normal: Option<i64>) -> Self {
+    // TODO(aw, minor, 7): Remove in 2.0.0
+    pub fn new2(vertex: i64, normal: Option<i64>, texture: Option<i64>) -> Self {
+        Self {
+            vertex,
+            texture,
+            normal,
+        }
+    }
+
+    pub fn new_vtn(vertex: i64, texture: Option<i64>, normal: Option<i64>) -> Self {
         Self {
             vertex,
             texture,

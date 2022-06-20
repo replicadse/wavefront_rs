@@ -499,9 +499,9 @@ fn test_read_to_end_face_vnt_3() {
         assert_eq!(
             Entity::Face {
                 vertices: vec!(
-                    FaceVertex::new2(0, Some(1), Some(2)),
-                    FaceVertex::new2(3, Some(4), Some(5)),
-                    FaceVertex::new2(6, Some(7), Some(8)),
+                    FaceVertex::new_vtn(0, Some(1), Some(2)),
+                    FaceVertex::new_vtn(3, Some(4), Some(5)),
+                    FaceVertex::new_vtn(6, Some(7), Some(8)),
                 )
             },
             x
@@ -518,9 +518,9 @@ fn test_read_line_face_vnt_3() {
     assert_eq!(
         Entity::Face {
             vertices: vec!(
-                FaceVertex::new2(0, Some(1), Some(2)),
-                FaceVertex::new2(3, Some(4), Some(5)),
-                FaceVertex::new2(6, Some(7), Some(8)),
+                FaceVertex::new_vtn(0, Some(1), Some(2)),
+                FaceVertex::new_vtn(3, Some(4), Some(5)),
+                FaceVertex::new_vtn(6, Some(7), Some(8)),
             )
         },
         ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
@@ -535,11 +535,11 @@ fn test_read_to_end_face_vnt_5() {
         assert_eq!(
             Entity::Face {
                 vertices: vec!(
-                    FaceVertex::new2(0, Some(1), Some(2)),
-                    FaceVertex::new2(3, Some(4), Some(5)),
-                    FaceVertex::new2(6, Some(7), Some(8)),
-                    FaceVertex::new2(9, Some(10), Some(11)),
-                    FaceVertex::new2(12, Some(13), Some(14)),
+                    FaceVertex::new_vtn(0, Some(1), Some(2)),
+                    FaceVertex::new_vtn(3, Some(4), Some(5)),
+                    FaceVertex::new_vtn(6, Some(7), Some(8)),
+                    FaceVertex::new_vtn(9, Some(10), Some(11)),
+                    FaceVertex::new_vtn(12, Some(13), Some(14)),
                 )
             },
             x
@@ -556,11 +556,11 @@ fn test_read_line_face_vnt_5() {
     assert_eq!(
         Entity::Face {
             vertices: vec!(
-                FaceVertex::new2(0, Some(1), Some(2)),
-                FaceVertex::new2(3, Some(4), Some(5)),
-                FaceVertex::new2(6, Some(7), Some(8)),
-                FaceVertex::new2(9, Some(10), Some(11)),
-                FaceVertex::new2(12, Some(13), Some(14)),
+                FaceVertex::new_vtn(0, Some(1), Some(2)),
+                FaceVertex::new_vtn(3, Some(4), Some(5)),
+                FaceVertex::new_vtn(6, Some(7), Some(8)),
+                FaceVertex::new_vtn(9, Some(10), Some(11)),
+                FaceVertex::new_vtn(12, Some(13), Some(14)),
             )
         },
         ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
@@ -575,9 +575,9 @@ fn test_read_to_end_face_vt() {
         assert_eq!(
             Entity::Face {
                 vertices: vec!(
-                    FaceVertex::new2(0, None, Some(2)),
-                    FaceVertex::new2(3, None, Some(5)),
-                    FaceVertex::new2(6, None, Some(8)),
+                    FaceVertex::new_vtn(0, None, Some(2)),
+                    FaceVertex::new_vtn(3, None, Some(5)),
+                    FaceVertex::new_vtn(6, None, Some(8)),
                 )
             },
             x
@@ -594,9 +594,9 @@ fn test_read_line_face_vt() {
     assert_eq!(
         Entity::Face {
             vertices: vec!(
-                FaceVertex::new2(0, None, Some(2)),
-                FaceVertex::new2(3, None, Some(5)),
-                FaceVertex::new2(6, None, Some(8)),
+                FaceVertex::new_vtn(0, None, Some(2)),
+                FaceVertex::new_vtn(3, None, Some(5)),
+                FaceVertex::new_vtn(6, None, Some(8)),
             )
         },
         ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
@@ -611,9 +611,9 @@ fn test_read_to_end_face_vn() {
         assert_eq!(
             Entity::Face {
                 vertices: vec!(
-                    FaceVertex::new2(0, Some(1), None),
-                    FaceVertex::new2(3, Some(4), None),
-                    FaceVertex::new2(6, Some(7), None),
+                    FaceVertex::new_vtn(0, Some(1), None),
+                    FaceVertex::new_vtn(3, Some(4), None),
+                    FaceVertex::new_vtn(6, Some(7), None),
                 )
             },
             x
@@ -630,9 +630,9 @@ fn test_read_line_face_vn() {
     assert_eq!(
         Entity::Face {
             vertices: vec!(
-                FaceVertex::new2(0, Some(1), None),
-                FaceVertex::new2(3, Some(4), None),
-                FaceVertex::new2(6, Some(7), None),
+                FaceVertex::new_vtn(0, Some(1), None),
+                FaceVertex::new_vtn(3, Some(4), None),
+                FaceVertex::new_vtn(6, Some(7), None),
             )
         },
         ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
@@ -647,9 +647,9 @@ fn test_read_to_end_face_v() {
         assert_eq!(
             Entity::Face {
                 vertices: vec!(
-                    FaceVertex::new2(0, None, None),
-                    FaceVertex::new2(3, None, None),
-                    FaceVertex::new2(6, None, None),
+                    FaceVertex::new_vtn(0, None, None),
+                    FaceVertex::new_vtn(3, None, None),
+                    FaceVertex::new_vtn(6, None, None),
                 )
             },
             x
@@ -666,9 +666,9 @@ fn test_read_line_face_v() {
     assert_eq!(
         Entity::Face {
             vertices: vec!(
-                FaceVertex::new2(0, None, None),
-                FaceVertex::new2(3, None, None),
-                FaceVertex::new2(6, None, None),
+                FaceVertex::new_vtn(0, None, None),
+                FaceVertex::new_vtn(3, None, None),
+                FaceVertex::new_vtn(6, None, None),
             )
         },
         ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()

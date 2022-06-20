@@ -187,9 +187,9 @@ fn test_write_vertex_parameter_u() {
 fn test_write_face_vtn_3() {
     let entity = Entity::Face {
         vertices: vec![
-            FaceVertex::new2(0, Some(1), Some(2)),
-            FaceVertex::new2(3, Some(4), Some(5)),
-            FaceVertex::new2(6, Some(7), Some(8)),
+            FaceVertex::new_vtn(0, Some(1), Some(2)),
+            FaceVertex::new_vtn(3, Some(4), Some(5)),
+            FaceVertex::new_vtn(6, Some(7), Some(8)),
         ],
     };
     let mut result = String::new();
@@ -201,12 +201,12 @@ fn test_write_face_vtn_3() {
 fn test_write_face_vtn_6() {
     let entity = Entity::Face {
         vertices: vec![
-            FaceVertex::new2(0, Some(1), Some(2)),
-            FaceVertex::new2(3, Some(4), Some(5)),
-            FaceVertex::new2(6, Some(7), Some(8)),
-            FaceVertex::new2(9, Some(10), Some(11)),
-            FaceVertex::new2(12, Some(13), Some(14)),
-            FaceVertex::new2(15, Some(16), Some(17)),
+            FaceVertex::new_vtn(0, Some(1), Some(2)),
+            FaceVertex::new_vtn(3, Some(4), Some(5)),
+            FaceVertex::new_vtn(6, Some(7), Some(8)),
+            FaceVertex::new_vtn(9, Some(10), Some(11)),
+            FaceVertex::new_vtn(12, Some(13), Some(14)),
+            FaceVertex::new_vtn(15, Some(16), Some(17)),
         ],
     };
     let mut result = String::new();
@@ -218,9 +218,9 @@ fn test_write_face_vtn_6() {
 fn test_write_face_vt() {
     let entity = Entity::Face {
         vertices: vec![
-            FaceVertex::new2(0, Some(1), None),
-            FaceVertex::new2(3, Some(4), None),
-            FaceVertex::new2(6, Some(7), None),
+            FaceVertex::new_vtn(0, Some(1), None),
+            FaceVertex::new_vtn(3, Some(4), None),
+            FaceVertex::new_vtn(6, Some(7), None),
         ],
     };
     let mut result = String::new();
@@ -232,9 +232,9 @@ fn test_write_face_vt() {
 fn test_write_face_vn() {
     let entity = Entity::Face {
         vertices: vec![
-            FaceVertex::new2(0, None, Some(2)),
-            FaceVertex::new2(3, None, Some(5)),
-            FaceVertex::new2(6, None, Some(8)),
+            FaceVertex::new_vtn(0, None, Some(2)),
+            FaceVertex::new_vtn(3, None, Some(5)),
+            FaceVertex::new_vtn(6, None, Some(8)),
         ],
     };
     let mut result = String::new();
@@ -246,9 +246,9 @@ fn test_write_face_vn() {
 fn test_write_face_v() {
     let entity = Entity::Face {
         vertices: vec![
-            FaceVertex::new2(0, None, None),
-            FaceVertex::new2(3, None, None),
-            FaceVertex::new2(6, None, None),
+            FaceVertex::new_vtn(0, None, None),
+            FaceVertex::new_vtn(3, None, None),
+            FaceVertex::new_vtn(6, None, None),
         ],
     };
     let mut result = String::new();
