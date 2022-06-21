@@ -32,7 +32,7 @@ fn test_teapot_read_write() {
         })));
         ReadLexer::read_to_end(&mut BufReader::new(source), |e| {
             let mut local_writer = writer_arc.lock().unwrap();
-            FormatWriter::write(&mut *local_writer, &e);
+            FormatWriter::write(&mut *local_writer, &e).unwrap();
             local_writer.write_all(b"\n").unwrap();
         })
         .unwrap();
@@ -55,7 +55,7 @@ fn test_lamp_read_write() {
         })));
         ReadLexer::read_to_end(&mut BufReader::new(source), |e| {
             let mut local_writer = writer_arc.lock().unwrap();
-            FormatWriter::write(&mut *local_writer, &e);
+            FormatWriter::write(&mut *local_writer, &e).unwrap();
             local_writer.write_all(b"\n").unwrap();
         })
         .unwrap();

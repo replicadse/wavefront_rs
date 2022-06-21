@@ -84,8 +84,8 @@ pub enum Entity {
     },
     /// Face consists of an arbitrary number (whereas n >= 3) of complex vertices that describe the polygon.\
     /// Example (vertex): `f 0 3 6`\
-    /// Example (vertex+uv+normal): `f 0/1/2 3/4/5 6/7/8`\
-    /// Example (vertex+uv): `f 0/1 3/4 6/7`
+    /// Example (vertex+texture+normal): `f 0/1/2 3/4/5 6/7/8`\
+    /// Example (vertex+texture): `f 0/1 3/4 6/7`
     /// Example (vertex+normal): `f 0//2 3//5 6//8`\
     Face {
         vertices: Vec<FaceVertex>,
@@ -133,16 +133,6 @@ impl FaceVertex {
         }
     }
 
-    // TODO(aw, minor, 8): Remove in 2.0.0
-    #[deprecated(since = "1.0.4", note = "use FaceVertex::new_vtn")]
-    pub fn new2(vertex: i64, normal: Option<i64>, texture: Option<i64>) -> Self {
-        Self {
-            vertex,
-            texture,
-            normal,
-        }
-    }
-
     pub fn new_vtn(vertex: i64, texture: Option<i64>, normal: Option<i64>) -> Self {
         Self {
             vertex,
@@ -155,7 +145,7 @@ impl FaceVertex {
 impl ToString for Entity {
     fn to_string(&self) -> String {
         let mut result = String::new();
-        FormatWriter::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), self);
+        FormatWriter::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), self).unwrap();
         result
     }
 }

@@ -1,7 +1,7 @@
 //! Contains logic to read entities from a `BufRead` that returns OBJ formatted strings.
 //!
 
-use crate::error::Error;
+use std::error::Error;
 use crate::obj::entity::Entity;
 use crate::obj::line_parser::LineParser;
 use std::io::BufRead;
@@ -17,7 +17,7 @@ impl ReadLexer {
     pub fn read_to_end<R: BufRead>(
         reader: &mut R,
         mut callback: impl FnMut(Entity),
-    ) -> Result<(), Error> {
+    ) -> Result<(), Box<dyn Error>> {
         for l in reader.lines() {
             let s: String = l?;
             let mut split = s.split_whitespace();
@@ -33,7 +33,7 @@ impl ReadLexer {
 
     /// Will read from the given `BufRead` until the first encountered linebreak.\
     /// Will return `Ok(Entity)` if successful or an `Error` (if parsing failed).
-    pub fn read_line<R: BufRead>(reader: &mut R) -> Result<Entity, Error> {
+    pub fn read_line<R: BufRead>(reader: &mut R) -> Result<Entity, Box<dyn Error>> {
         let value = &mut String::new();
         match reader.read_line(value) {
             Ok(x) => {
@@ -41,13 +41,13 @@ impl ReadLexer {
                     let mut split = value.split_whitespace();
                     match split.next() {
                         Some(x) => LineParser::parse_line(&mut split, x, value.as_ref()),
-                        None => Err(Error::new("invalid line")),
+                        None => Err(Box::new(crate::error::GenericError::new("invalid line"))),
                     }
                 } else {
-                    Err(Error::new("reached EOF"))
+                    Err(Box::new(crate::error::GenericError::new("reached EOF")))
                 }
             }
-            Err(x) => Err(Error::from(x)),
+            Err(_) => Err(Box::new(crate::error::GenericError::new("error reading line"))),
         }
     }
 }

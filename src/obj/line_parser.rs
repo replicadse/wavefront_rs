@@ -1,4 +1,4 @@
-use crate::error::Error;
+use std::error::Error;
 use crate::obj::entity::{Entity, FaceVertex};
 
 pub struct LineParser {}
@@ -8,7 +8,7 @@ impl LineParser {
         split: &mut std::str::SplitWhitespace,
         token: &str,
         line: &str,
-    ) -> Result<Entity, Error> {
+    ) -> std::result::Result<Entity, Box<dyn Error>> {
         match token.to_lowercase().as_str() {
             "#" => Ok(Entity::Comment {
                 content: line.trim_start_matches("# ").to_owned(),
@@ -36,31 +36,31 @@ impl LineParser {
                 if let Some(x) = split.next() {
                     Ok(Entity::Mtllib { name: x.to_owned() })
                 } else {
-                    Err(Error::new(
+                    Err(Box::new(crate::error::GenericError::new(
                         format!("could not parse line \"{}\"", token).as_ref(),
-                    ))
+                    )))
                 }
             }
             "usemtl" => {
                 if let Some(x) = split.next() {
                     Ok(Entity::Usemtl { name: x.to_owned() })
                 } else {
-                    Err(Error::new(
+                    Err(Box::new(crate::error::GenericError::new(
                         format!("could not parse line \"{}\"", token).as_ref(),
-                    ))
+                    )))
                 }
             }
-            _ => Err(Error::new(format!("unknown token \"{}\"", token).as_ref())),
+            _ => Err(Box::new(crate::error::GenericError::new(format!("unknown token \"{}\"", token).as_ref()))),
         }
     }
 
-    fn parse_v(split: &mut std::str::SplitWhitespace) -> Result<Entity, Error> {
+    fn parse_v(split: &mut std::str::SplitWhitespace) -> std::result::Result<Entity, Box<dyn Error>> {
         let xs = split.next();
         let ys = split.next();
         let zs = split.next();
         let ws = split.next();
         if xs == None || ys == None || zs == None {
-            return Err(Error::new("invalid data for v"));
+            return Err(Box::new(crate::error::GenericError::new("invalid data for v")));
         }
         let x = xs.unwrap().parse::<f64>();
         let y = ys.unwrap().parse::<f64>();
@@ -68,12 +68,12 @@ impl LineParser {
         let w = match ws {
             Some(v) => match v.parse::<f64>() {
                 Ok(v) => Some(v),
-                Err(_) => return Err(Error::new("invalid data for v")),
+                Err(_) => return Err(Box::new(crate::error::GenericError::new("invalid data for v"))),
             },
             None => None,
         };
         if x.is_err() || y.is_err() || z.is_err() {
-            return Err(Error::new("invalid data for v"));
+            return Err(Box::new(crate::error::GenericError::new("invalid data for v")));
         }
         Ok(Entity::Vertex {
             x: x.unwrap(),
@@ -83,23 +83,23 @@ impl LineParser {
         })
     }
 
-    fn parse_vt_vp(is_vt: bool, split: &mut std::str::SplitWhitespace) -> Result<Entity, Error> {
+    fn parse_vt_vp(is_vt: bool, split: &mut std::str::SplitWhitespace) -> std::result::Result<Entity, Box<dyn Error>> {
         let us = split.next();
         let vs = split.next();
         let ws = split.next();
         if us == None {
-            return Err(Error::new(
+            return Err(Box::new(crate::error::GenericError::new(
                 format!("invalid data for {}", if is_vt { "vt" } else { "vp" }).as_ref(),
-            ));
+            )));
         }
         let u = us.unwrap().parse::<f64>();
         let v = match vs {
             Some(v) => match v.parse::<f64>() {
                 Ok(v) => Some(v),
                 Err(_) => {
-                    return Err(Error::new(
+                    return Err(Box::new(crate::error::GenericError::new(
                         format!("invalid data for {}", if is_vt { "vt" } else { "vp" }).as_ref(),
-                    ))
+                    )))
                 }
             },
             None => None,
@@ -108,17 +108,17 @@ impl LineParser {
             Some(v) => match v.parse::<f64>() {
                 Ok(v) => Some(v),
                 Err(_) => {
-                    return Err(Error::new(
+                    return Err(Box::new(crate::error::GenericError::new(
                         format!("invalid data for {}", if is_vt { "vt" } else { "vp" }).as_ref(),
-                    ))
+                    )))
                 }
             },
             None => None,
         };
         if u.is_err() {
-            return Err(Error::new(
+            return Err(Box::new(crate::error::GenericError::new(
                 format!("invalid data for {}", if is_vt { "vt" } else { "vp" }).as_ref(),
-            ));
+            )));
         }
 
         if is_vt {
@@ -136,18 +136,18 @@ impl LineParser {
         }
     }
 
-    fn parse_vn(split: &mut std::str::SplitWhitespace) -> Result<Entity, Error> {
+    fn parse_vn(split: &mut std::str::SplitWhitespace) -> std::result::Result<Entity, Box<dyn Error>> {
         let xs = split.next();
         let ys = split.next();
         let zs = split.next();
         if xs == None || ys == None || zs == None {
-            return Err(Error::new("invalid data for vn"));
+            return Err(Box::new(crate::error::GenericError::new("invalid data for vn")));
         }
         let x = xs.unwrap().parse::<f64>();
         let y = ys.unwrap().parse::<f64>();
         let z = zs.unwrap().parse::<f64>();
         if x.is_err() || y.is_err() || z.is_err() {
-            return Err(Error::new("invalid data for vn"));
+            return Err(Box::new(crate::error::GenericError::new("invalid data for vn")));
         }
         Ok(Entity::VertexNormal {
             x: x.unwrap(),
@@ -156,7 +156,7 @@ impl LineParser {
         })
     }
 
-    fn parse_face(split: &mut std::str::SplitWhitespace) -> Result<Entity, Error> {
+    fn parse_face(split: &mut std::str::SplitWhitespace) -> std::result::Result<Entity, Box<dyn Error>> {
         let mut face = Vec::new();
         for vtn in split {
             let mut vtns = vtn.split('/');
@@ -175,13 +175,13 @@ impl LineParser {
                 }
                 face.push(vertex);
             } else {
-                return Err(Error::new("could not parse face"));
+                return Err(Box::new(crate::error::GenericError::new("could not parse face")));
             }
         }
         Ok(Entity::Face { vertices: face })
     }
 
-    fn parse_polyline(split: &mut std::str::SplitWhitespace) -> Result<Entity, Error> {
+    fn parse_polyline(split: &mut std::str::SplitWhitespace) -> std::result::Result<Entity, Box<dyn Error>> {
         let mut vertices = Vec::new();
         for x in split {
             vertices.push(x.parse::<i64>().unwrap())
@@ -189,7 +189,7 @@ impl LineParser {
         Ok(Entity::Line { vertices })
     }
 
-    fn parse_point(split: &mut std::str::SplitWhitespace) -> Result<Entity, Error> {
+    fn parse_point(split: &mut std::str::SplitWhitespace) -> std::result::Result<Entity, Box<dyn Error>> {
         let mut vertices = Vec::new();
         for x in split {
             vertices.push(x.parse::<i64>().unwrap())
