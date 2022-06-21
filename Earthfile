@@ -30,7 +30,7 @@ test:
 
 docs:
   FROM +code
-  RUN cargo doc
+  RUN cargo doc --no-deps --document-private-items --all-features
   SAVE ARTIFACT ./target/doc AS LOCAL ./.artifacts/docs
 
 wiki:
