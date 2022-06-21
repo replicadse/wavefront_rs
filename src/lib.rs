@@ -16,8 +16,8 @@ pub mod obj {
 
     // public exports
     pub mod entity;
-    pub mod writer;
     pub mod parser;
+    pub mod writer;
 
     // private crates mods
     mod line_parser;

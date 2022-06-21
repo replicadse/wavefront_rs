@@ -3,8 +3,8 @@
 //! [`wavefront obj`]: https://en.wikipedia.org/wiki/Wavefront_.obj_file
 //!
 
-use crate::obj::writer::*;
 use crate::obj::parser::*;
+use crate::obj::writer::*;
 use std::io::{BufReader, BufWriter, Cursor};
 
 pub type Format = String;

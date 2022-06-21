@@ -1,8 +1,8 @@
 use std::fs::File;
 use std::io::{BufReader, BufWriter, Read, Write};
 
-use wavefront_rs::obj::writer::Writer;
 use wavefront_rs::obj::parser::Parser;
+use wavefront_rs::obj::writer::Writer;
 
 #[test]
 fn test_teapot_smoke() {

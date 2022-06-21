@@ -1,9 +1,9 @@
 //! Contains logic to read entities from a `BufRead` that returns OBJ formatted strings.
 //!
 
-use std::error::Error;
 use crate::obj::entity::Entity;
 use crate::obj::line_parser::LineParser;
+use std::error::Error;
 use std::io::BufRead;
 use std::result::Result;
 
@@ -47,7 +47,9 @@ impl Parser {
                     Err(Box::new(crate::error::GenericError::new("reached EOF")))
                 }
             }
-            Err(_) => Err(Box::new(crate::error::GenericError::new("error reading line"))),
+            Err(_) => Err(Box::new(crate::error::GenericError::new(
+                "error reading line",
+            ))),
         }
     }
 }
