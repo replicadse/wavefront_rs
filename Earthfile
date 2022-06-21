@@ -29,9 +29,14 @@ test:
   RUN cargo test --all
 
 docs:
+  FROM +code
+  RUN cargo doc
+  SAVE ARTIFACT ./target/doc AS LOCAL ./.artifacts/docs
+
+wiki:
   FROM +retype
   WORKDIR /app
   COPY ./docs/* .
   RUN ls -alghR
   RUN retype build
-  SAVE ARTIFACT .retype AS LOCAL ./.artifacts/docs
+  SAVE ARTIFACT .retype AS LOCAL ./.artifacts/wiki

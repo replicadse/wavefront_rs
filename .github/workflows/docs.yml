@@ -1,4 +1,4 @@
-name: wiki
+name: docs
 on:
   workflow_dispatch:
   push:
