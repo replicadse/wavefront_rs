@@ -7,7 +7,7 @@
 
 <!-- cargo-sync-readme start -->
 
-[`wavefront_rs`] is a RUST implementation for parsing and writing the wavefront obj and mtl format.
+[`wavefront_rs`] is a RUST implementation for parsing and writing the wavefront obj format.
 
 [`wavefront_rs`]: https://github.com/replicadse/wavefront_rs
 

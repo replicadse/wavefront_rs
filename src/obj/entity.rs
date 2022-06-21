@@ -3,8 +3,8 @@
 //! [`wavefront obj`]: https://en.wikipedia.org/wiki/Wavefront_.obj_file
 //!
 
-use crate::obj::format_writer::*;
-use crate::obj::read_lexer::*;
+use crate::obj::writer::*;
+use crate::obj::parser::*;
 use std::io::{BufReader, BufWriter, Cursor};
 
 pub type Format = String;
@@ -145,14 +145,14 @@ impl FaceVertex {
 impl ToString for Entity {
     fn to_string(&self) -> String {
         let mut result = String::new();
-        FormatWriter::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), self).unwrap();
+        Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), self).unwrap();
         result
     }
 }
 
 impl From<Format> for Entity {
     fn from(input: Format) -> Self {
-        ReadLexer::read_line(&mut BufReader::new(Cursor::new(input))).unwrap()
+        Parser::read_line(&mut BufReader::new(Cursor::new(input))).unwrap()
     }
 }
 

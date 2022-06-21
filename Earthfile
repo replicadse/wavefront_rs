@@ -2,7 +2,7 @@ VERSION 0.6
 
 rust:
   ARG toolchain
-  FROM alpine:3.15
+  FROM alpine:3.16
   RUN [ ! -z "$toolchain" ] || exit 1
 
   RUN apk update && apk upgrade
@@ -10,6 +10,10 @@ rust:
   ENV PATH=/root/.cargo/bin:"$PATH"
   RUN rustup-init -y
   RUN rustup default $toolchain
+
+retype:
+  FROM node:18-buster
+  RUN npm i -g retypeapp
 
 code:
   FROM +rust
@@ -23,3 +27,11 @@ build:
 test:
   FROM +code
   RUN cargo test --all
+
+docs:
+  FROM +retype
+  WORKDIR /app
+  COPY ./docs/* .
+  RUN ls -alghR
+  RUN retype build
+  SAVE ARTIFACT .retype AS LOCAL ./.artifacts/docs

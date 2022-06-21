@@ -1,13 +1,13 @@
 extern crate wavefront_rs;
 use std::io::BufReader;
 use wavefront_rs::obj::entity::*;
-use wavefront_rs::obj::read_lexer::*;
+use wavefront_rs::obj::parser::*;
 
 #[test]
 fn test_read_to_end_comment() {
     let stream = std::io::Cursor::new("# token");
     let exists = std::cell::Cell::new(false);
-    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+    Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
             Entity::Comment {
                 content: "token".to_owned()
@@ -27,7 +27,7 @@ fn test_read_line_comment() {
         Entity::Comment {
             content: "token".to_owned()
         },
-        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+        Parser::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }
 
@@ -35,7 +35,7 @@ fn test_read_line_comment() {
 fn test_read_to_end_object() {
     let stream = std::io::Cursor::new("o token");
     let exists = std::cell::Cell::new(false);
-    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+    Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
             Entity::Object {
                 name: "token".to_owned()
@@ -55,7 +55,7 @@ fn test_read_line_object() {
         Entity::Object {
             name: "token".to_owned()
         },
-        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+        Parser::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }
 
@@ -63,7 +63,7 @@ fn test_read_line_object() {
 fn test_read_to_end_group() {
     let stream = std::io::Cursor::new("g token");
     let exists = std::cell::Cell::new(false);
-    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+    Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
             Entity::Group {
                 name: "token".to_owned()
@@ -83,7 +83,7 @@ fn test_read_line_group() {
         Entity::Group {
             name: "token".to_owned()
         },
-        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+        Parser::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }
 
@@ -91,7 +91,7 @@ fn test_read_line_group() {
 fn test_read_to_end_smoothing_group() {
     let stream = std::io::Cursor::new("s token");
     let exists = std::cell::Cell::new(false);
-    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+    Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
             Entity::SmoothingGroup {
                 name: "token".to_owned()
@@ -111,7 +111,7 @@ fn test_read_line_smoothing_group() {
         Entity::SmoothingGroup {
             name: "token".to_owned()
         },
-        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+        Parser::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }
 
@@ -119,7 +119,7 @@ fn test_read_line_smoothing_group() {
 fn test_read_to_end_merging_group() {
     let stream = std::io::Cursor::new("mg token");
     let exists = std::cell::Cell::new(false);
-    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+    Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
             Entity::MergingGroup {
                 name: "token".to_owned()
@@ -139,7 +139,7 @@ fn test_read_line_merging_group() {
         Entity::MergingGroup {
             name: "token".to_owned()
         },
-        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+        Parser::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }
 
@@ -147,7 +147,7 @@ fn test_read_line_merging_group() {
 fn test_read_to_end_mtllib() {
     let stream = std::io::Cursor::new("mtllib token");
     let exists = std::cell::Cell::new(false);
-    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+    Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
             Entity::Mtllib {
                 name: "token".to_owned()
@@ -167,7 +167,7 @@ fn test_read_line_mtllib() {
         Entity::Mtllib {
             name: "token".to_owned()
         },
-        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+        Parser::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }
 
@@ -175,7 +175,7 @@ fn test_read_line_mtllib() {
 fn test_read_to_end_usemtl() {
     let stream = std::io::Cursor::new("usemtl token");
     let exists = std::cell::Cell::new(false);
-    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+    Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
             Entity::Usemtl {
                 name: "token".to_owned()
@@ -195,7 +195,7 @@ fn test_read_line_usemtl() {
         Entity::Usemtl {
             name: "token".to_owned()
         },
-        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+        Parser::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }
 
@@ -203,7 +203,7 @@ fn test_read_line_usemtl() {
 fn test_read_to_end_vertex_xyzw() {
     let stream = std::io::Cursor::new("v 0.1 1.2 2.3 3.4");
     let exists = std::cell::Cell::new(false);
-    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+    Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
             Entity::Vertex {
                 x: 0.1f64,
@@ -229,7 +229,7 @@ fn test_read_line_vertex_xyzw() {
             z: 2.3f64,
             w: Some(3.4f64),
         },
-        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+        Parser::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }
 
@@ -237,7 +237,7 @@ fn test_read_line_vertex_xyzw() {
 fn test_read_to_end_vertex_xyz() {
     let stream = std::io::Cursor::new("v 0.1 1.2 2.3");
     let exists = std::cell::Cell::new(false);
-    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+    Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
             Entity::Vertex {
                 x: 0.1f64,
@@ -263,7 +263,7 @@ fn test_read_line_vertex_xyz() {
             z: 2.3f64,
             w: None,
         },
-        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+        Parser::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }
 
@@ -271,7 +271,7 @@ fn test_read_line_vertex_xyz() {
 fn test_read_to_end_vertex_normal() {
     let stream = std::io::Cursor::new("vn 0.1 1.2 2.3");
     let exists = std::cell::Cell::new(false);
-    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+    Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
             Entity::VertexNormal {
                 x: 0.1f64,
@@ -295,7 +295,7 @@ fn test_read_line_vertex_normal() {
             y: 1.2f64,
             z: 2.3f64,
         },
-        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+        Parser::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }
 
@@ -303,7 +303,7 @@ fn test_read_line_vertex_normal() {
 fn test_read_to_end_vertex_texture_uvw() {
     let stream = std::io::Cursor::new("vt 0.1 1.2 2.3");
     let exists = std::cell::Cell::new(false);
-    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+    Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
             Entity::VertexTexture {
                 u: 0.1f64,
@@ -327,7 +327,7 @@ fn test_read_line_vertex_texture_uvw() {
             v: Some(1.2f64),
             w: Some(2.3f64),
         },
-        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+        Parser::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }
 
@@ -335,7 +335,7 @@ fn test_read_line_vertex_texture_uvw() {
 fn test_read_to_end_vertex_texture_uv() {
     let stream = std::io::Cursor::new("vt 0.1 1.2");
     let exists = std::cell::Cell::new(false);
-    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+    Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
             Entity::VertexTexture {
                 u: 0.1f64,
@@ -359,7 +359,7 @@ fn test_read_line_vertex_texture_uv() {
             v: Some(1.2f64),
             w: None,
         },
-        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+        Parser::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }
 
@@ -367,7 +367,7 @@ fn test_read_line_vertex_texture_uv() {
 fn test_read_to_end_vertex_texture_u() {
     let stream = std::io::Cursor::new("vt 0.1");
     let exists = std::cell::Cell::new(false);
-    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+    Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
             Entity::VertexTexture {
                 u: 0.1f64,
@@ -391,7 +391,7 @@ fn test_read_line_vertex_texture_u() {
             v: None,
             w: None,
         },
-        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+        Parser::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }
 
@@ -399,7 +399,7 @@ fn test_read_line_vertex_texture_u() {
 fn test_read_to_end_vertex_parameter_uvw() {
     let stream = std::io::Cursor::new("vp 0.1 1.2 2.3");
     let exists = std::cell::Cell::new(false);
-    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+    Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
             Entity::VertexParameter {
                 u: 0.1f64,
@@ -423,7 +423,7 @@ fn test_read_line_vertex_parameter_uvw() {
             v: Some(1.2f64),
             w: Some(2.3f64),
         },
-        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+        Parser::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }
 
@@ -431,7 +431,7 @@ fn test_read_line_vertex_parameter_uvw() {
 fn test_read_to_end_vertex_parameter_uv() {
     let stream = std::io::Cursor::new("vp 0.1 1.2");
     let exists = std::cell::Cell::new(false);
-    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+    Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
             Entity::VertexParameter {
                 u: 0.1f64,
@@ -455,7 +455,7 @@ fn test_read_line_vertex_parameter_uv() {
             v: Some(1.2f64),
             w: None,
         },
-        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+        Parser::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }
 
@@ -463,7 +463,7 @@ fn test_read_line_vertex_parameter_uv() {
 fn test_read_to_end_vertex_parameter_u() {
     let stream = std::io::Cursor::new("vp 0.1");
     let exists = std::cell::Cell::new(false);
-    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+    Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
             Entity::VertexParameter {
                 u: 0.1f64,
@@ -487,7 +487,7 @@ fn test_read_line_vertex_parameter_u() {
             v: None,
             w: None,
         },
-        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+        Parser::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }
 
@@ -495,7 +495,7 @@ fn test_read_line_vertex_parameter_u() {
 fn test_read_to_end_face_vnt_3() {
     let stream = std::io::Cursor::new("f 0/1/2 3/4/5 6/7/8");
     let exists = std::cell::Cell::new(false);
-    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+    Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
             Entity::Face {
                 vertices: vec!(
@@ -523,7 +523,7 @@ fn test_read_line_face_vnt_3() {
                 FaceVertex::new_vtn(6, Some(7), Some(8)),
             )
         },
-        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+        Parser::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }
 
@@ -531,7 +531,7 @@ fn test_read_line_face_vnt_3() {
 fn test_read_to_end_face_vnt_5() {
     let stream = std::io::Cursor::new("f 0/1/2 3/4/5 6/7/8 9/10/11 12/13/14");
     let exists = std::cell::Cell::new(false);
-    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+    Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
             Entity::Face {
                 vertices: vec!(
@@ -563,7 +563,7 @@ fn test_read_line_face_vnt_5() {
                 FaceVertex::new_vtn(12, Some(13), Some(14)),
             )
         },
-        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+        Parser::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }
 
@@ -571,7 +571,7 @@ fn test_read_line_face_vnt_5() {
 fn test_read_to_end_face_vt() {
     let stream = std::io::Cursor::new("f 0//2 3//5 6//8");
     let exists = std::cell::Cell::new(false);
-    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+    Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
             Entity::Face {
                 vertices: vec!(
@@ -599,7 +599,7 @@ fn test_read_line_face_vt() {
                 FaceVertex::new_vtn(6, None, Some(8)),
             )
         },
-        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+        Parser::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }
 
@@ -607,7 +607,7 @@ fn test_read_line_face_vt() {
 fn test_read_to_end_face_vn() {
     let stream = std::io::Cursor::new("f 0/1 3/4 6/7");
     let exists = std::cell::Cell::new(false);
-    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+    Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
             Entity::Face {
                 vertices: vec!(
@@ -635,7 +635,7 @@ fn test_read_line_face_vn() {
                 FaceVertex::new_vtn(6, Some(7), None),
             )
         },
-        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+        Parser::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }
 
@@ -643,7 +643,7 @@ fn test_read_line_face_vn() {
 fn test_read_to_end_face_v() {
     let stream = std::io::Cursor::new("f 0 3 6");
     let exists = std::cell::Cell::new(false);
-    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+    Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
             Entity::Face {
                 vertices: vec!(
@@ -671,7 +671,7 @@ fn test_read_line_face_v() {
                 FaceVertex::new_vtn(6, None, None),
             )
         },
-        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+        Parser::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }
 
@@ -679,7 +679,7 @@ fn test_read_line_face_v() {
 fn test_read_to_end_line() {
     let stream = std::io::Cursor::new("l 0 1 2 3 4");
     let exists = std::cell::Cell::new(false);
-    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+    Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
             Entity::Line {
                 vertices: vec!(0, 1, 2, 3, 4)
@@ -699,7 +699,7 @@ fn test_read_line_line() {
         Entity::Line {
             vertices: vec!(0, 1, 2, 3, 4)
         },
-        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+        Parser::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }
 
@@ -707,7 +707,7 @@ fn test_read_line_line() {
 fn test_read_to_end_point() {
     let stream = std::io::Cursor::new("p 0 1 2 3 4");
     let exists = std::cell::Cell::new(false);
-    ReadLexer::read_to_end(&mut BufReader::new(stream), |x| {
+    Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
             Entity::Point {
                 vertices: vec!(0, 1, 2, 3, 4)
@@ -727,6 +727,6 @@ fn test_read_line_point() {
         Entity::Point {
             vertices: vec!(0, 1, 2, 3, 4)
         },
-        ReadLexer::read_line(&mut BufReader::new(stream)).unwrap()
+        Parser::read_line(&mut BufReader::new(stream)).unwrap()
     );
 }

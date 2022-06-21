@@ -6,9 +6,9 @@ use crate::obj::entity::Entity;
 use std::io::Write;
 
 /// Will write entities to a `Write` trait.
-pub struct FormatWriter {}
+pub struct Writer {}
 
-impl FormatWriter {
+impl Writer {
     /// Writes the given entity to the given `Write` trait as OBJ format representation of that `Entity`.
     pub fn write<W: Write>(writer: &mut W, e: &Entity) -> std::result::Result<(), Box<dyn Error>> {
         match e {

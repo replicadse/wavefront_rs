@@ -14,10 +14,11 @@ pub mod obj {
     //! [`wavefront obj`]: https://en.wikipedia.org/wiki/Wavefront_.obj_file
     //!
 
+    // public exports
     pub mod entity;
-    pub mod format_writer;
-    pub mod read_lexer;
-    pub mod string_lexer;
+    pub mod writer;
+    pub mod parser;
 
+    // private crates mods
     mod line_parser;
 }

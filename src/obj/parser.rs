@@ -8,15 +8,15 @@ use std::io::BufRead;
 use std::result::Result;
 
 /// Will read from a given `BufRead` and parse entities.
-pub struct ReadLexer {}
+pub struct Parser {}
 
-impl ReadLexer {
+impl Parser {
     /// Will read from the given `BufRead`as long as it is not EOF.\
     /// When an entity is parsed, the given callback is invoked and the entity is inserted into it as parameter.\
     /// Will return `Ok(())` if successful or an `Error` (if parsing failed).
     pub fn read_to_end<R: BufRead>(
         reader: &mut R,
-        mut callback: impl FnMut(Entity),
+        callback: impl Fn(Entity),
     ) -> Result<(), Box<dyn Error>> {
         for l in reader.lines() {
             let s: String = l?;
