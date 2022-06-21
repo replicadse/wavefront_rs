@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Entity","Contains all possible entities that can exist in an OBJ format."]],"struct":[["FaceVertex","Describes a vertex in a face."]],"type":[["Format",""]]});

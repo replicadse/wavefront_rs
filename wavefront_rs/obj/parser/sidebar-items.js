@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Parser","Will read from a given `BufRead` and parse entities."]]});

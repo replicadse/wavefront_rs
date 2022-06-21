@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["error",""],["obj","The obj module contains all the types that are used when working with the `wavefront obj` format including entities, lexer, writer etc."]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["GenericError","An error type."]]});
