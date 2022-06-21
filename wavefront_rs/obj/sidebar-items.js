@@ -1,1 +1,0 @@
-initSidebarItems({"mod":[["entity","Contains the entity types that are used when working with the `wavefront obj` format."],["parser","Contains logic to read entities from a `BufRead` that returns OBJ formatted strings."],["writer","Contains the logic to transform entities to OBJ formatted strings."]]});

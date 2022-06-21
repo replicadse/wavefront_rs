@@ -1,3 +1,0 @@
-(function() {var implementors = {};
-implementors["wavefront_rs"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.61.0/alloc/string/trait.ToString.html\" title=\"trait alloc::string::ToString\">ToString</a> for <a class=\"enum\" href=\"wavefront_rs/obj/entity/enum.Entity.html\" title=\"enum wavefront_rs::obj::entity::Entity\">Entity</a>","synthetic":false,"types":["wavefront_rs::obj::entity::Entity"]}];
-if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

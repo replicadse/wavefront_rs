@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["Writer","Will write entities to a `Write` trait."]]});
