@@ -16,7 +16,7 @@ impl Parser {
     /// Will return `Ok(())` if successful or an `Error` (if parsing failed).
     pub fn read_to_end<R: BufRead>(
         reader: &mut R,
-        callback: impl Fn(Entity),
+        mut callback: impl FnMut(Entity),
     ) -> Result<(), Box<dyn Error>> {
         for l in reader.lines() {
             let s: String = l?;

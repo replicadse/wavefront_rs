@@ -1,4 +1,3 @@
-extern crate wavefront_rs;
 use std::io::BufReader;
 use wavefront_rs::obj::entity::*;
 use wavefront_rs::obj::parser::*;

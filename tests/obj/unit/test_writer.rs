@@ -1,4 +1,3 @@
-extern crate wavefront_rs;
 use std::io::BufWriter;
 use wavefront_rs::obj::entity::*;
 use wavefront_rs::obj::writer::Writer;

@@ -1,7 +1,6 @@
 use std::fs::File;
 use std::io::{BufReader, BufWriter, Read, Write};
 
-extern crate wavefront_rs;
 use wavefront_rs::obj::writer::Writer;
 use wavefront_rs::obj::parser::Parser;
 

@@ -1,4 +1,3 @@
-extern crate wavefront_rs;
 use wavefront_rs::obj::entity::*;
 
 #[test]

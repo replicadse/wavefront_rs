@@ -5,7 +5,7 @@ mod obj {
 
     mod unit {
         mod test_entity;
-        mod test_read_lexer;
+        mod test_parser;
         mod test_writer;
     }
 }
