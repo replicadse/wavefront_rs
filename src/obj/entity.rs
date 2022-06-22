@@ -1,11 +1,18 @@
-//! Contains the entity types that are used when working with the [`wavefront obj`] format.
+//! Contains the entity types that are used when working with the [`wavefront
+//! obj`] format.
 //!
 //! [`wavefront obj`]: https://en.wikipedia.org/wiki/Wavefront_.obj_file
-//!
 
-use crate::obj::parser::*;
-use crate::obj::writer::*;
-use std::io::{BufReader, BufWriter, Cursor};
+use std::io::{
+    BufReader,
+    BufWriter,
+    Cursor,
+};
+
+use crate::obj::{
+    parser::*,
+    writer::*,
+};
 
 pub type Format = String;
 
@@ -42,15 +49,15 @@ pub enum Entity {
         z: f64,
         w: Option<f64>,
     },
-    /// VertexNormal consists of `x`, `y`and `z`. The normal will usually but is not required to be a unit vector.\
-    /// Example: `vn 0.1 1.2 2.3`
+    /// VertexNormal consists of `x`, `y`and `z`. The normal will usually but is
+    /// not required to be a unit vector.\ Example: `vn 0.1 1.2 2.3`
     VertexNormal {
         x: f64,
         y: f64,
         z: f64,
     },
-    /// VertexTexture consists of `u`, `v` and `w` whereas `u` and `w` are optional.\
-    /// Example uvw: `vt 0.1 1.2 2.3`\
+    /// VertexTexture consists of `u`, `v` and `w` whereas `u` and `w` are
+    /// optional.\ Example uvw: `vt 0.1 1.2 2.3`\
     /// Example uv: `vt 0.1 1.2`\
     /// Example u: `vt 0.1`
     VertexTexture {
@@ -58,12 +65,12 @@ pub enum Entity {
         v: Option<f64>,
         w: Option<f64>,
     },
-    /// VertexParameter consists of `u`, `v` and `w` whereas `v` and `w` are optional.\
-    /// `u` is a 1D control point in the parameter space of a curve.
-    /// `u + v` is a 2D control point in the parameter space of a surface.\
-    /// Control poins for non rational trimming curves require `u + v`.\
-    /// Control points for rational trimming curves require `u + v + w`.\
-    /// `w` defaults to 1.0 if not set.\
+    /// VertexParameter consists of `u`, `v` and `w` whereas `v` and `w` are
+    /// optional.\ `u` is a 1D control point in the parameter space of a
+    /// curve. `u + v` is a 2D control point in the parameter space of a
+    /// surface.\ Control poins for non rational trimming curves require `u
+    /// + v`.\ Control points for rational trimming curves require `u + v +
+    /// w`.\ `w` defaults to 1.0 if not set.\
     /// Example uvw: `vp 0.1 1.2 2.3`\
     /// Example uv: `vp 0.1 1.2`\
     /// Example u: `vp 0.1`
@@ -78,12 +85,13 @@ pub enum Entity {
     Point {
         vertices: Vec<i64>,
     },
-    /// Line consists of an arbitrary number (whereas n >= 2) of vertices that describe the path.
+    /// Line consists of an arbitrary number (whereas n >= 2) of vertices that
+    /// describe the path.
     Line {
         vertices: Vec<i64>,
     },
-    /// Face consists of an arbitrary number (whereas n >= 3) of complex vertices that describe the polygon.\
-    /// Example (vertex): `f 0 3 6`\
+    /// Face consists of an arbitrary number (whereas n >= 3) of complex
+    /// vertices that describe the polygon.\ Example (vertex): `f 0 3 6`\
     /// Example (vertex+texture+normal): `f 0/1/2 3/4/5 6/7/8`\
     /// Example (vertex+texture): `f 0/1 3/4 6/7`
     /// Example (vertex+normal): `f 0//2 3//5 6//8`\
@@ -95,20 +103,20 @@ pub enum Entity {
 impl Entity {
     pub fn token(&self) -> &str {
         match self {
-            Self::Comment { .. } => "#",
-            Self::Object { .. } => "o",
-            Self::Group { .. } => "g",
-            Self::SmoothingGroup { .. } => "s",
-            Self::MergingGroup { .. } => "mg",
-            Self::MtlLib { .. } => "mtllib",
-            Self::UseMtl { .. } => "usemtl",
-            Self::Vertex { .. } => "v",
-            Self::VertexNormal { .. } => "vn",
-            Self::VertexTexture { .. } => "vt",
-            Self::VertexParameter { .. } => "vp",
-            Self::Point { .. } => "p",
-            Self::Line { .. } => "l",
-            Self::Face { .. } => "f",
+            | Self::Comment { .. } => "#",
+            | Self::Object { .. } => "o",
+            | Self::Group { .. } => "g",
+            | Self::SmoothingGroup { .. } => "s",
+            | Self::MergingGroup { .. } => "mg",
+            | Self::MtlLib { .. } => "mtllib",
+            | Self::UseMtl { .. } => "usemtl",
+            | Self::Vertex { .. } => "v",
+            | Self::VertexNormal { .. } => "vn",
+            | Self::VertexTexture { .. } => "vt",
+            | Self::VertexParameter { .. } => "vp",
+            | Self::Point { .. } => "p",
+            | Self::Line { .. } => "l",
+            | Self::Face { .. } => "f",
         }
     }
 }

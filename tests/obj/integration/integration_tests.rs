@@ -1,8 +1,17 @@
-use std::fs::File;
-use std::io::{BufReader, BufWriter, Read, Write};
+use std::{
+    fs::File,
+    io::{
+        BufReader,
+        BufWriter,
+        Read,
+        Write,
+    },
+};
 
-use wavefront_rs::obj::parser::Parser;
-use wavefront_rs::obj::writer::Writer;
+use wavefront_rs::obj::{
+    parser::Parser,
+    writer::Writer,
+};
 
 #[test]
 fn test_teapot_smoke() {
@@ -26,9 +35,7 @@ fn test_teapot_read_write() {
         .unwrap();
     let mut dest = String::new();
     {
-        let writer_arc = std::sync::Arc::new(std::sync::Mutex::new(BufWriter::new(unsafe {
-            dest.as_mut_vec()
-        })));
+        let writer_arc = std::sync::Arc::new(std::sync::Mutex::new(BufWriter::new(unsafe { dest.as_mut_vec() })));
         Parser::read_to_end(&mut BufReader::new(source), |e| {
             let mut local_writer = writer_arc.lock().unwrap();
             Writer::write(&mut *local_writer, &e).unwrap();
@@ -49,9 +56,7 @@ fn test_lamp_read_write() {
         .unwrap();
     let mut dest = String::new();
     {
-        let writer_arc = std::sync::Arc::new(std::sync::Mutex::new(BufWriter::new(unsafe {
-            dest.as_mut_vec()
-        })));
+        let writer_arc = std::sync::Arc::new(std::sync::Mutex::new(BufWriter::new(unsafe { dest.as_mut_vec() })));
         Parser::read_to_end(&mut BufReader::new(source), |e| {
             let mut local_writer = writer_arc.lock().unwrap();
             Writer::write(&mut *local_writer, &e).unwrap();

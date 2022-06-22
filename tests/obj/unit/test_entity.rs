@@ -10,12 +10,9 @@ fn test_into_format_comment() {
 
 #[test]
 fn test_from_objformat_comment() {
-    assert_eq!(
-        Entity::from(Format::from("# token")),
-        Entity::Comment {
-            content: "token".to_owned()
-        }
-    );
+    assert_eq!(Entity::from(Format::from("# token")), Entity::Comment {
+        content: "token".to_owned()
+    });
 }
 
 #[test]
@@ -28,12 +25,9 @@ fn test_into_format_object() {
 
 #[test]
 fn test_from_objformat_object() {
-    assert_eq!(
-        Entity::from(Format::from("o token")),
-        Entity::Object {
-            name: "token".to_owned()
-        }
-    );
+    assert_eq!(Entity::from(Format::from("o token")), Entity::Object {
+        name: "token".to_owned()
+    });
 }
 
 #[test]
@@ -46,12 +40,9 @@ fn test_into_format_group() {
 
 #[test]
 fn test_from_objformat_group() {
-    assert_eq!(
-        Entity::from(Format::from("g token")),
-        Entity::Group {
-            name: "token".to_owned()
-        }
-    );
+    assert_eq!(Entity::from(Format::from("g token")), Entity::Group {
+        name: "token".to_owned()
+    });
 }
 
 #[test]
@@ -64,12 +55,9 @@ fn test_into_format_smoothing_group() {
 
 #[test]
 fn test_from_objformat_smoothing_group() {
-    assert_eq!(
-        Entity::from(Format::from("s token")),
-        Entity::SmoothingGroup {
-            name: "token".to_owned()
-        }
-    );
+    assert_eq!(Entity::from(Format::from("s token")), Entity::SmoothingGroup {
+        name: "token".to_owned()
+    });
 }
 
 #[test]
@@ -82,12 +70,9 @@ fn test_into_format_merging_group() {
 
 #[test]
 fn test_from_objformat_merging_group() {
-    assert_eq!(
-        Entity::from(Format::from("mg token")),
-        Entity::MergingGroup {
-            name: "token".to_owned()
-        }
-    );
+    assert_eq!(Entity::from(Format::from("mg token")), Entity::MergingGroup {
+        name: "token".to_owned()
+    });
 }
 
 #[test]
@@ -100,12 +85,9 @@ fn test_into_format_mtllib() {
 
 #[test]
 fn test_from_objformat_mtllib() {
-    assert_eq!(
-        Entity::from(Format::from("mtllib token")),
-        Entity::MtlLib {
-            name: "token".to_owned()
-        }
-    );
+    assert_eq!(Entity::from(Format::from("mtllib token")), Entity::MtlLib {
+        name: "token".to_owned()
+    });
 }
 
 #[test]
@@ -118,12 +100,9 @@ fn test_into_format_usemtl() {
 
 #[test]
 fn test_from_objformat_usemtl() {
-    assert_eq!(
-        Entity::from(Format::from("usemtl token")),
-        Entity::UseMtl {
-            name: "token".to_owned()
-        }
-    );
+    assert_eq!(Entity::from(Format::from("usemtl token")), Entity::UseMtl {
+        name: "token".to_owned()
+    });
 }
 
 #[test]
@@ -504,79 +483,37 @@ fn test_from_objformat_point() {
 
 #[test]
 fn test_token_comment() {
-    assert_eq!(
-        "#",
-        Entity::Comment {
-            content: "".to_owned()
-        }
-        .token()
-    );
+    assert_eq!("#", Entity::Comment { content: "".to_owned() }.token());
 }
 
 #[test]
 fn test_token_object() {
-    assert_eq!(
-        "o",
-        Entity::Object {
-            name: "".to_owned()
-        }
-        .token()
-    );
+    assert_eq!("o", Entity::Object { name: "".to_owned() }.token());
 }
 
 #[test]
 fn test_token_group() {
-    assert_eq!(
-        "g",
-        Entity::Group {
-            name: "".to_owned()
-        }
-        .token()
-    );
+    assert_eq!("g", Entity::Group { name: "".to_owned() }.token());
 }
 
 #[test]
 fn test_token_smoothing_group() {
-    assert_eq!(
-        "s",
-        Entity::SmoothingGroup {
-            name: "".to_owned()
-        }
-        .token()
-    );
+    assert_eq!("s", Entity::SmoothingGroup { name: "".to_owned() }.token());
 }
 
 #[test]
 fn test_token_merging_group() {
-    assert_eq!(
-        "mg",
-        Entity::MergingGroup {
-            name: "".to_owned()
-        }
-        .token()
-    );
+    assert_eq!("mg", Entity::MergingGroup { name: "".to_owned() }.token());
 }
 
 #[test]
 fn test_token_mtllib() {
-    assert_eq!(
-        "mtllib",
-        Entity::MtlLib {
-            name: "".to_owned()
-        }
-        .token()
-    );
+    assert_eq!("mtllib", Entity::MtlLib { name: "".to_owned() }.token());
 }
 
 #[test]
 fn test_token_usemtl() {
-    assert_eq!(
-        "usemtl",
-        Entity::UseMtl {
-            name: "".to_owned()
-        }
-        .token()
-    );
+    assert_eq!("usemtl", Entity::UseMtl { name: "".to_owned() }.token());
 }
 
 #[test]
@@ -819,10 +756,7 @@ fn test_to_string_face_vtn_6() {
             FaceVertex::new_vtn(15, Some(16), Some(17)),
         ],
     };
-    assert_eq!(
-        "f 0/1/2 3/4/5 6/7/8 9/10/11 12/13/14 15/16/17",
-        entity.to_string()
-    );
+    assert_eq!("f 0/1/2 3/4/5 6/7/8 9/10/11 12/13/14 15/16/17", entity.to_string());
 }
 
 #[test]

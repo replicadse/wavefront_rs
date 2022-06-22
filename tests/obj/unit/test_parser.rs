@@ -1,6 +1,9 @@
 use std::io::BufReader;
-use wavefront_rs::obj::entity::*;
-use wavefront_rs::obj::parser::*;
+
+use wavefront_rs::obj::{
+    entity::*,
+    parser::*,
+};
 
 #[test]
 fn test_read_to_end_comment() {

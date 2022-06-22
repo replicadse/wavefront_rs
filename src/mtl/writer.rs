@@ -1,90 +1,84 @@
 //! Contains the logic to transform entities to MTL formatted strings.
-//!
+
+use std::io::Write;
 
 use crate::mtl::entity::Entity;
-use std::io::Write;
 
 /// Will write entities to a `Write` trait.
 pub struct Writer {}
 
 impl Writer {
-    /// Writes the given entity to the given `Write` trait as MTL format representation of that `Entity`.
-    pub fn write<W: Write>(
-        writer: &mut W,
-        e: &Entity,
-    ) -> std::result::Result<(), Box<dyn std::error::Error>> {
-        let safecall = move |writer: &mut W,
-                             e: &Entity|
-              -> std::result::Result<(), Box<dyn std::error::Error>> {
+    /// Writes the given entity to the given `Write` trait as MTL format
+    /// representation of that `Entity`.
+    pub fn write<W: Write>(writer: &mut W, e: &Entity) -> std::result::Result<(), Box<dyn std::error::Error>> {
+        let safecall = move |writer: &mut W, e: &Entity| -> std::result::Result<(), Box<dyn std::error::Error>> {
             match e {
-                Entity::Comment { content } => {
+                | Entity::Comment { content } => {
                     writer.write_all(format!("{} {}", e.token(), content).as_ref())?;
                 },
-                Entity::MaterialName { name } => {
+                | Entity::MaterialName { name } => {
                     writer.write_all(format!("{} {}", e.token(), name).as_ref())?;
                 },
-                Entity::AmbientColor { r, g, b } => {
+                | Entity::AmbientColor { r, g, b } => {
                     writer.write_all(format!("{} {} {} {}", e.token(), r, g, b).as_ref())?;
                 },
-                Entity::DiffuseColor { r, g, b } => {
+                | Entity::DiffuseColor { r, g, b } => {
                     writer.write_all(format!("{} {} {} {}", e.token(), r, g, b).as_ref())?;
                 },
-                Entity::SpecularColor { r, g, b } => {
+                | Entity::SpecularColor { r, g, b } => {
                     writer.write_all(format!("{} {} {} {}", e.token(), r, g, b).as_ref())?;
                 },
-                Entity::SpecularHighlights { value } => {
+                | Entity::SpecularHighlights { value } => {
                     writer.write_all(format!("{} {}", e.token(), value).as_ref())?;
                 },
-                Entity::OpticalDensity { value } => {
+                | Entity::OpticalDensity { value } => {
                     writer.write_all(format!("{} {}", e.token(), value).as_ref())?;
                 },
-                Entity::Dissolve { value } => {
+                | Entity::Dissolve { value } => {
                     writer.write_all(format!("{} {}", e.token(), value).as_ref())?;
                 },
-                Entity::InvertedDissolve { value } => {
+                | Entity::InvertedDissolve { value } => {
                     writer.write_all(format!("{} {}", e.token(), value).as_ref())?;
                 },
-                Entity::Illum { mode } => {
+                | Entity::Illum { mode } => {
                     writer.write_all(format!("{} {}", e.token(), mode.to_string()).as_ref())?;
                 },
-                Entity::TextureMapAmbient { file } => {
+                | Entity::TextureMapAmbient { file } => {
                     writer.write_all(format!("{} {}", e.token(), file).as_ref())?;
                 },
-                Entity::TextureMapDiffuse { file } => {
+                | Entity::TextureMapDiffuse { file } => {
                     writer.write_all(format!("{} {}", e.token(), file).as_ref())?;
                 },
-                Entity::TransmissionFilterColorRGB { r, g, b } => {
+                | Entity::TransmissionFilterColorRGB { r, g, b } => {
                     writer.write_all(format!("{} {} {} {}", e.token(), r, g, b).as_ref())?;
                 },
-                Entity::TextureMapSpecular { file } => {
+                | Entity::TextureMapSpecular { file } => {
                     writer.write_all(format!("{} {}", e.token(), file).as_ref())?;
                 },
-                Entity::TextureMapHighlight { file } => {
+                | Entity::TextureMapHighlight { file } => {
                     writer.write_all(format!("{} {}", e.token(), file).as_ref())?;
                 },
-                Entity::TextureMapAlpha { file } => {
+                | Entity::TextureMapAlpha { file } => {
                     writer.write_all(format!("{} {}", e.token(), file).as_ref())?;
                 },
-                Entity::BumpMap { file } => {
+                | Entity::BumpMap { file } => {
                     writer.write_all(format!("{} {}", e.token(), file).as_ref())?;
                 },
-                Entity::DisplacementMap { file } => {
+                | Entity::DisplacementMap { file } => {
                     writer.write_all(format!("{} {}", e.token(), file).as_ref())?;
                 },
-                Entity::StencilDecalTextureMap { file } => {
+                | Entity::StencilDecalTextureMap { file } => {
                     writer.write_all(format!("{} {}", e.token(), file).as_ref())?;
                 },
-                Entity::SphericalReflectionMap { file } => {
+                | Entity::SphericalReflectionMap { file } => {
                     writer.write_all(format!("{} {}", e.token(), file).as_ref())?;
                 },
             }
             Ok(())
         };
         match safecall(writer, e) {
-            Ok(..) => Ok(()),
-            Err(err) => Err(Box::new(crate::error::WriterError::new(
-                err.to_string().as_ref(),
-            ))),
+            | Ok(..) => Ok(()),
+            | Err(err) => Err(Box::new(crate::error::WriterError::new(err.to_string().as_ref()))),
         }
     }
 }

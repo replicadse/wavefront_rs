@@ -1,26 +1,22 @@
 //! Contains the logic to transform entities to OBJ formatted strings.
-//!
+
+use std::io::Write;
 
 use crate::obj::entity::Entity;
-use std::io::Write;
 
 /// Will write entities to a `Write` trait.
 pub struct Writer {}
 
 impl Writer {
-    /// Writes the given entity to the given `Write` trait as OBJ format representation of that `Entity`.
-    pub fn write<W: Write>(
-        writer: &mut W,
-        e: &Entity,
-    ) -> std::result::Result<(), Box<dyn std::error::Error>> {
-        let safecall = move |writer: &mut W,
-                             e: &Entity|
-              -> std::result::Result<(), Box<dyn std::error::Error>> {
+    /// Writes the given entity to the given `Write` trait as OBJ format
+    /// representation of that `Entity`.
+    pub fn write<W: Write>(writer: &mut W, e: &Entity) -> std::result::Result<(), Box<dyn std::error::Error>> {
+        let safecall = move |writer: &mut W, e: &Entity| -> std::result::Result<(), Box<dyn std::error::Error>> {
             match e {
-                Entity::Comment { content } => {
+                | Entity::Comment { content } => {
                     writer.write_all(format!("{} {}", e.token(), content).as_ref())?;
-                }
-                Entity::Face { vertices } => {
+                },
+                | Entity::Face { vertices } => {
                     writer.write_all(e.token().as_ref())?;
                     for v in vertices {
                         writer.write_all(" ".as_ref())?;
@@ -33,8 +29,8 @@ impl Writer {
                                 format!(
                                     "{}{}",
                                     match v.texture {
-                                        None => "//",
-                                        Some(..) => "/",
+                                        | None => "//",
+                                        | Some(..) => "/",
                                     },
                                     x
                                 )
@@ -42,47 +38,47 @@ impl Writer {
                             )?;
                         }
                     }
-                }
-                Entity::Point { vertices } => {
+                },
+                | Entity::Point { vertices } => {
                     writer.write_all(e.token().as_ref())?;
                     for v in vertices {
                         writer.write_all(format!(" {}", v).as_ref())?;
                     }
-                }
-                Entity::Line { vertices } => {
+                },
+                | Entity::Line { vertices } => {
                     writer.write_all(e.token().as_ref())?;
                     for v in vertices {
                         writer.write_all(format!(" {}", v).as_ref())?;
                     }
-                }
-                Entity::Group { name } => {
+                },
+                | Entity::Group { name } => {
                     writer.write_all(format!("{} {}", e.token(), name).as_ref())?;
-                }
-                Entity::MtlLib { name } => {
+                },
+                | Entity::MtlLib { name } => {
                     writer.write_all(format!("{} {}", e.token(), name).as_ref())?;
-                }
-                Entity::Object { name } => {
+                },
+                | Entity::Object { name } => {
                     writer.write_all(format!("{} {}", e.token(), name).as_ref())?;
-                }
-                Entity::SmoothingGroup { name } => {
+                },
+                | Entity::SmoothingGroup { name } => {
                     writer.write_all(format!("{} {}", e.token(), name).as_ref())?;
-                }
-                Entity::MergingGroup { name } => {
+                },
+                | Entity::MergingGroup { name } => {
                     writer.write_all(format!("{} {}", e.token(), name).as_ref())?;
-                }
-                Entity::UseMtl { name } => {
+                },
+                | Entity::UseMtl { name } => {
                     writer.write_all(format!("{} {}", e.token(), name).as_ref())?;
-                }
-                Entity::Vertex { x, y, z, w } => {
+                },
+                | Entity::Vertex { x, y, z, w } => {
                     writer.write_all(format!("{} {} {} {}", e.token(), x, y, z).as_ref())?;
                     if let Some(v) = w {
                         writer.write_all(format!(" {}", v).as_ref())?;
                     }
-                }
-                Entity::VertexNormal { x, y, z } => {
+                },
+                | Entity::VertexNormal { x, y, z } => {
                     writer.write_all(format!("{} {} {} {}", e.token(), x, y, z).as_ref())?;
-                }
-                Entity::VertexTexture { u, v, w } => {
+                },
+                | Entity::VertexTexture { u, v, w } => {
                     writer.write_all(format!("{} {}", e.token(), u).as_ref())?;
                     if let Some(v) = v {
                         writer.write_all(format!(" {}", v).as_ref())?;
@@ -90,8 +86,8 @@ impl Writer {
                             writer.write_all(format!(" {}", w).as_ref())?;
                         }
                     }
-                }
-                Entity::VertexParameter { u, v, w } => {
+                },
+                | Entity::VertexParameter { u, v, w } => {
                     writer.write_all(format!("{} {}", e.token(), u).as_ref())?;
                     if let Some(v) = v {
                         writer.write_all(format!(" {}", v).as_ref())?;
@@ -99,15 +95,13 @@ impl Writer {
                             writer.write_all(format!(" {}", w).as_ref())?;
                         }
                     }
-                }
+                },
             }
             Ok(())
         };
         match safecall(writer, e) {
-            Ok(..) => Ok(()),
-            Err(err) => Err(Box::new(crate::error::WriterError::new(
-                err.to_string().as_ref(),
-            ))),
+            | Ok(..) => Ok(()),
+            | Err(err) => Err(Box::new(crate::error::WriterError::new(err.to_string().as_ref()))),
         }
     }
 }

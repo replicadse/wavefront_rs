@@ -1,6 +1,9 @@
 use std::io::BufWriter;
-use wavefront_rs::obj::entity::*;
-use wavefront_rs::obj::writer::Writer;
+
+use wavefront_rs::obj::{
+    entity::*,
+    writer::Writer,
+};
 
 #[test]
 fn test_write_comment() {

@@ -1,11 +1,18 @@
-//! Contains the entity types that are used when working with the [`wavefront mtl`] format.
+//! Contains the entity types that are used when working with the [`wavefront
+//! mtl`] format.
 //!
 //! [`wavefront mtl`]: https://en.wikipedia.org/wiki/Wavefront_.obj_file
-//!
 
-use crate::mtl::parser::*;
-use crate::mtl::writer::*;
-use std::io::{BufReader, BufWriter, Cursor};
+use std::io::{
+    BufReader,
+    BufWriter,
+    Cursor,
+};
+
+use crate::mtl::{
+    parser::*,
+    writer::*,
+};
 
 pub type Format = String;
 
@@ -38,99 +45,51 @@ pub enum IllumMode {
 /// Contains all possible entities that can exist in an MTL format.
 #[derive(Debug, Clone, PartialEq)]
 pub enum Entity {
-    Comment {
-        content: String,
-    },
-    MaterialName {
-        name: String,
-    },
-    AmbientColor {
-        r: f64,
-        g: f64,
-        b: f64,
-    },
-    DiffuseColor {
-        r: f64,
-        g: f64,
-        b: f64,
-    },
-    SpecularColor {
-        r: f64,
-        g: f64,
-        b: f64,
-    },
-    SpecularHighlights {
-        value: f64,
-    },
-    OpticalDensity {
-        value: f64,
-    },
-    Dissolve {
-        value: f64,
-    },
-    InvertedDissolve {
-        value: f64,
-    },
-    Illum {
-        mode: IllumMode,
-    },
-    TextureMapAmbient {
-        file: String,
-    },
-    TextureMapDiffuse {
-        file: String,
-    },
-    TransmissionFilterColorRGB {
-        r: f64,
-        g: f64,
-        b: f64,
-    },
-    TextureMapSpecular {
-        file: String,
-    },
-    TextureMapHighlight {
-        file: String,
-    },
-    TextureMapAlpha {
-        file: String,
-    },
-    BumpMap {
-        file: String,
-    },
-    DisplacementMap {
-        file: String,
-    },
-    StencilDecalTextureMap {
-        file: String,
-    },
-    SphericalReflectionMap {
-        file: String,
-    }
+    Comment { content: String },
+    MaterialName { name: String },
+    AmbientColor { r: f64, g: f64, b: f64 },
+    DiffuseColor { r: f64, g: f64, b: f64 },
+    SpecularColor { r: f64, g: f64, b: f64 },
+    SpecularHighlights { value: f64 },
+    OpticalDensity { value: f64 },
+    Dissolve { value: f64 },
+    InvertedDissolve { value: f64 },
+    Illum { mode: IllumMode },
+    TextureMapAmbient { file: String },
+    TextureMapDiffuse { file: String },
+    TransmissionFilterColorRGB { r: f64, g: f64, b: f64 },
+    TextureMapSpecular { file: String },
+    TextureMapHighlight { file: String },
+    TextureMapAlpha { file: String },
+    BumpMap { file: String },
+    DisplacementMap { file: String },
+    StencilDecalTextureMap { file: String },
+    SphericalReflectionMap { file: String },
 }
 
 impl Entity {
     pub fn token(&self) -> &str {
         match self {
-            Self::Comment { .. } => "#",
-            Self::MaterialName { .. } => "newmtl",
-            Self::AmbientColor { .. } => "ka",
-            Self::DiffuseColor { .. } => "kd",
-            Self::SpecularColor { .. } => "ks",
-            Self::SpecularHighlights { .. } => "ns",
-            Self::OpticalDensity { .. } => "ni",
-            Self::Dissolve { .. } => "d",
-            Self::InvertedDissolve { .. } => "tr",
-            Self::Illum { .. } => "illum",
-            Self::TransmissionFilterColorRGB { .. } => "tf",
-            Self::TextureMapAmbient { .. } => "map_ka",
-            Self::TextureMapDiffuse { .. } => "map_kd",
-            Self::TextureMapSpecular { .. } => "map_ks",
-            Self::TextureMapHighlight { .. } => "map_ns",
-            Self::TextureMapAlpha { .. } => "map_d",
-            Self::BumpMap { .. } => "map_bump",
-            Self::DisplacementMap { .. } => "disp",
-            Self::StencilDecalTextureMap { .. } => "decal",
-            Self::SphericalReflectionMap { .. } => "refl",
+            | Self::Comment { .. } => "#",
+            | Self::MaterialName { .. } => "newmtl",
+            | Self::AmbientColor { .. } => "ka",
+            | Self::DiffuseColor { .. } => "kd",
+            | Self::SpecularColor { .. } => "ks",
+            | Self::SpecularHighlights { .. } => "ns",
+            | Self::OpticalDensity { .. } => "ni",
+            | Self::Dissolve { .. } => "d",
+            | Self::InvertedDissolve { .. } => "tr",
+            | Self::Illum { .. } => "illum",
+            | Self::TransmissionFilterColorRGB { .. } => "tf",
+            | Self::TextureMapAmbient { .. } => "map_ka",
+            | Self::TextureMapDiffuse { .. } => "map_kd",
+            | Self::TextureMapSpecular { .. } => "map_ks",
+            | Self::TextureMapHighlight { .. } => "map_ns",
+            | Self::TextureMapAlpha { .. } => "map_d",
+            | Self::BumpMap { .. } => "map_bump",
+            | Self::DisplacementMap { .. } => "disp",
+            | Self::StencilDecalTextureMap { .. } => "decal",
+            | Self::SphericalReflectionMap { .. } => "refl",
         }
     }
 }
@@ -158,17 +117,17 @@ impl From<Entity> for String {
 impl ToString for IllumMode {
     fn to_string(&self) -> String {
         match self {
-            Self::ColorNoAmbient => 0.to_string(),
-            Self::ColorAndAmbient => 1.to_string(),
-            Self::Highlight => 2.to_string(),
-            Self::ReflecRaytrace => 3.to_string(),
-            Self::TranspGlassAndReflecRaytrace => 4.to_string(),
-            Self::ReflecFresnelRaytrace => 5.to_string(),
-            Self::TranspRefracRaytraceNoFresnel => 6.to_string(),
-            Self::TranspRefracRaytraceFresnel => 7.to_string(),
-            Self::ReflecNoRaytrace => 8.to_string(),
-            Self::TranspGlassNoRaytrace => 9.to_string(),
-            Self::ShadowsToVisSurfaces => 10.to_string(),
+            | Self::ColorNoAmbient => 0.to_string(),
+            | Self::ColorAndAmbient => 1.to_string(),
+            | Self::Highlight => 2.to_string(),
+            | Self::ReflecRaytrace => 3.to_string(),
+            | Self::TranspGlassAndReflecRaytrace => 4.to_string(),
+            | Self::ReflecFresnelRaytrace => 5.to_string(),
+            | Self::TranspRefracRaytraceNoFresnel => 6.to_string(),
+            | Self::TranspRefracRaytraceFresnel => 7.to_string(),
+            | Self::ReflecNoRaytrace => 8.to_string(),
+            | Self::TranspGlassNoRaytrace => 9.to_string(),
+            | Self::ShadowsToVisSurfaces => 10.to_string(),
         }
     }
 }
@@ -176,18 +135,18 @@ impl ToString for IllumMode {
 impl From<i16> for IllumMode {
     fn from(input: i16) -> Self {
         match input {
-            0 => Self::ColorNoAmbient,
-            1 => Self::ColorAndAmbient,
-            2 => Self::Highlight,
-            3 => Self::ReflecRaytrace,
-            4 => Self::TranspGlassAndReflecRaytrace,
-            5 => Self::ReflecFresnelRaytrace,
-            6 => Self::TranspRefracRaytraceNoFresnel,
-            7 => Self::TranspRefracRaytraceFresnel,
-            8 => Self::ReflecNoRaytrace,
-            9 => Self::TranspGlassNoRaytrace,
-            10 => Self::ShadowsToVisSurfaces,
-            _ => Err(crate::error::ParserError::new("could not parse illum mode")).unwrap()
+            | 0 => Self::ColorNoAmbient,
+            | 1 => Self::ColorAndAmbient,
+            | 2 => Self::Highlight,
+            | 3 => Self::ReflecRaytrace,
+            | 4 => Self::TranspGlassAndReflecRaytrace,
+            | 5 => Self::ReflecFresnelRaytrace,
+            | 6 => Self::TranspRefracRaytraceNoFresnel,
+            | 7 => Self::TranspRefracRaytraceFresnel,
+            | 8 => Self::ReflecNoRaytrace,
+            | 9 => Self::TranspGlassNoRaytrace,
+            | 10 => Self::ShadowsToVisSurfaces,
+            | _ => Err(crate::error::ParserError::new("could not parse illum mode")).unwrap(),
         }
     }
 }
