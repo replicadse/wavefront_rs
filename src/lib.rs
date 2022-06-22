@@ -18,7 +18,4 @@ pub mod obj {
     pub mod entity;
     pub mod parser;
     pub mod writer;
-
-    // private crates mods
-    mod line_parser;
 }

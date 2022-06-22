@@ -152,7 +152,7 @@ impl ToString for Entity {
 
 impl From<Format> for Entity {
     fn from(input: Format) -> Self {
-        Parser::read_line(&mut BufReader::new(Cursor::new(input))).unwrap()
+        Parser::parse_line(&mut BufReader::new(Cursor::new(input))).unwrap()
     }
 }
 
