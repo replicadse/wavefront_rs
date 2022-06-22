@@ -79,16 +79,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: install tools
-      run: |
-        sudo apt-get install build-essential
-        rustup default stable
-        pip install invoke
-        - name: install earthly
     - name: install earthly
       run: "sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.6.14/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'"
     - name: publish
       run: |
-        invoke ci.update-version --version=${{ github.event.inputs.version }}
-        cargo login ${{ secrets.CRATES_IO_TOKEN }}
-        cargo publish --allow-dirty
+        earthly +release --toolchain=stable --version=${{ github.event.inputs.version }} --secret token=${{ secrets.CRATES_IO_TOKEN }}
