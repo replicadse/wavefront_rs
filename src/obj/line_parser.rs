@@ -71,6 +71,7 @@ impl LineParser {
         let x = xs.unwrap().parse::<f64>();
         let y = ys.unwrap().parse::<f64>();
         let z = zs.unwrap().parse::<f64>();
+
         let w = match ws {
             Some(v) => match v.parse::<f64>() {
                 Ok(v) => Some(v),
@@ -88,9 +89,9 @@ impl LineParser {
             )));
         }
         Ok(Entity::Vertex {
-            x: x.unwrap(),
-            y: y.unwrap(),
-            z: z.unwrap(),
+            x: x?,
+            y: y?,
+            z: z?,
             w,
         })
     }
@@ -138,13 +139,13 @@ impl LineParser {
 
         if is_vt {
             Ok(Entity::VertexTexture {
-                u: u.unwrap(),
+                u: u?,
                 v,
                 w,
             })
         } else {
             Ok(Entity::VertexParameter {
-                u: u.unwrap(),
+                u: u?,
                 v,
                 w,
             })
@@ -171,9 +172,9 @@ impl LineParser {
             )));
         }
         Ok(Entity::VertexNormal {
-            x: x.unwrap(),
-            y: y.unwrap(),
-            z: z.unwrap(),
+            x: x?,
+            y: y?,
+            z: z?,
         })
     }
 
@@ -184,16 +185,16 @@ impl LineParser {
         for vtn in split {
             let mut vtns = vtn.split('/');
             if let Some(v) = vtns.next() {
-                let v_parsed = v.parse::<i64>().unwrap();
+                let v_parsed = v.parse::<i64>()?;
                 let mut vertex = FaceVertex::new(v_parsed);
                 if let Some(vt) = vtns.next() {
                     if !vt.is_empty() {
-                        vertex.texture = Some(vt.parse::<i64>().unwrap());
+                        vertex.texture = Some(vt.parse::<i64>()?);
                     }
                 }
                 if let Some(vn) = vtns.next() {
                     if !vn.is_empty() {
-                        vertex.normal = Some(vn.parse::<i64>().unwrap());
+                        vertex.normal = Some(vn.parse::<i64>()?);
                     }
                 }
                 face.push(vertex);
@@ -211,7 +212,7 @@ impl LineParser {
     ) -> std::result::Result<Entity, Box<dyn Error>> {
         let mut vertices = Vec::new();
         for x in split {
-            vertices.push(x.parse::<i64>().unwrap())
+            vertices.push(x.parse::<i64>()?)
         }
         Ok(Entity::Line { vertices })
     }
@@ -221,7 +222,7 @@ impl LineParser {
     ) -> std::result::Result<Entity, Box<dyn Error>> {
         let mut vertices = Vec::new();
         for x in split {
-            vertices.push(x.parse::<i64>().unwrap())
+            vertices.push(x.parse::<i64>()?)
         }
         Ok(Entity::Point { vertices })
     }
