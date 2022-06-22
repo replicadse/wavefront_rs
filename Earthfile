@@ -39,6 +39,13 @@ docs:
   RUN cargo doc --no-deps --document-private-items --all-features
   SAVE ARTIFACT ./target/doc AS LOCAL ./.artifacts/docs
 
+release:
+  FROM +code
+  RUN sed 's/version = "0.0.0"/version = "'{version}'"/g' Cargo.toml > Cargo.toml.tmp
+  RUN mv Cargo.toml.tmp Cargo.toml
+  RUN --secret token cargo login $token
+  # RUN cargo publish --allow-dirty
+
 wiki:
   FROM +retype
   WORKDIR /app
