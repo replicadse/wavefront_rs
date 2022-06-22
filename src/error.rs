@@ -25,4 +25,5 @@ macro_rules! make_error {
     };
 }
 
-make_error!(GenericError);
+make_error!(ParserError);
+make_error!(WriterError);

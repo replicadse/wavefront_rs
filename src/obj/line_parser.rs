@@ -36,7 +36,7 @@ impl LineParser {
                 if let Some(x) = split.next() {
                     Ok(Entity::Mtllib { name: x.to_owned() })
                 } else {
-                    Err(Box::new(crate::error::GenericError::new(
+                    Err(Box::new(crate::error::ParserError::new(
                         format!("could not parse line \"{}\"", token).as_ref(),
                     )))
                 }
@@ -45,12 +45,12 @@ impl LineParser {
                 if let Some(x) = split.next() {
                     Ok(Entity::Usemtl { name: x.to_owned() })
                 } else {
-                    Err(Box::new(crate::error::GenericError::new(
+                    Err(Box::new(crate::error::ParserError::new(
                         format!("could not parse line \"{}\"", token).as_ref(),
                     )))
                 }
             }
-            _ => Err(Box::new(crate::error::GenericError::new(
+            _ => Err(Box::new(crate::error::ParserError::new(
                 format!("unknown token \"{}\"", token).as_ref(),
             ))),
         }
@@ -64,7 +64,7 @@ impl LineParser {
         let zs = split.next();
         let ws = split.next();
         if xs == None || ys == None || zs == None {
-            return Err(Box::new(crate::error::GenericError::new(
+            return Err(Box::new(crate::error::ParserError::new(
                 "invalid data for v",
             )));
         }
@@ -76,7 +76,7 @@ impl LineParser {
             Some(v) => match v.parse::<f64>() {
                 Ok(v) => Some(v),
                 Err(_) => {
-                    return Err(Box::new(crate::error::GenericError::new(
+                    return Err(Box::new(crate::error::ParserError::new(
                         "invalid data for v",
                     )))
                 }
@@ -84,7 +84,7 @@ impl LineParser {
             None => None,
         };
         if x.is_err() || y.is_err() || z.is_err() {
-            return Err(Box::new(crate::error::GenericError::new(
+            return Err(Box::new(crate::error::ParserError::new(
                 "invalid data for v",
             )));
         }
@@ -104,7 +104,7 @@ impl LineParser {
         let vs = split.next();
         let ws = split.next();
         if us == None {
-            return Err(Box::new(crate::error::GenericError::new(
+            return Err(Box::new(crate::error::ParserError::new(
                 format!("invalid data for {}", if is_vt { "vt" } else { "vp" }).as_ref(),
             )));
         }
@@ -113,7 +113,7 @@ impl LineParser {
             Some(v) => match v.parse::<f64>() {
                 Ok(v) => Some(v),
                 Err(_) => {
-                    return Err(Box::new(crate::error::GenericError::new(
+                    return Err(Box::new(crate::error::ParserError::new(
                         format!("invalid data for {}", if is_vt { "vt" } else { "vp" }).as_ref(),
                     )))
                 }
@@ -124,7 +124,7 @@ impl LineParser {
             Some(v) => match v.parse::<f64>() {
                 Ok(v) => Some(v),
                 Err(_) => {
-                    return Err(Box::new(crate::error::GenericError::new(
+                    return Err(Box::new(crate::error::ParserError::new(
                         format!("invalid data for {}", if is_vt { "vt" } else { "vp" }).as_ref(),
                     )))
                 }
@@ -132,7 +132,7 @@ impl LineParser {
             None => None,
         };
         if u.is_err() {
-            return Err(Box::new(crate::error::GenericError::new(
+            return Err(Box::new(crate::error::ParserError::new(
                 format!("invalid data for {}", if is_vt { "vt" } else { "vp" }).as_ref(),
             )));
         }
@@ -159,7 +159,7 @@ impl LineParser {
         let ys = split.next();
         let zs = split.next();
         if xs == None || ys == None || zs == None {
-            return Err(Box::new(crate::error::GenericError::new(
+            return Err(Box::new(crate::error::ParserError::new(
                 "invalid data for vn",
             )));
         }
@@ -167,7 +167,7 @@ impl LineParser {
         let y = ys.unwrap().parse::<f64>();
         let z = zs.unwrap().parse::<f64>();
         if x.is_err() || y.is_err() || z.is_err() {
-            return Err(Box::new(crate::error::GenericError::new(
+            return Err(Box::new(crate::error::ParserError::new(
                 "invalid data for vn",
             )));
         }
@@ -199,7 +199,7 @@ impl LineParser {
                 }
                 face.push(vertex);
             } else {
-                return Err(Box::new(crate::error::GenericError::new(
+                return Err(Box::new(crate::error::ParserError::new(
                     "could not parse face",
                 )));
             }

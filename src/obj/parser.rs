@@ -41,13 +41,13 @@ impl Parser {
                     let mut split = value.split_whitespace();
                     match split.next() {
                         Some(x) => LineParser::parse_line(&mut split, x, value.as_ref()),
-                        None => Err(Box::new(crate::error::GenericError::new("invalid line"))),
+                        None => Err(Box::new(crate::error::ParserError::new("invalid line"))),
                     }
                 } else {
-                    Err(Box::new(crate::error::GenericError::new("reached EOF")))
+                    Err(Box::new(crate::error::ParserError::new("reached EOF")))
                 }
             }
-            Err(_) => Err(Box::new(crate::error::GenericError::new(
+            Err(_) => Err(Box::new(crate::error::ParserError::new(
                 "error reading line",
             ))),
         }
