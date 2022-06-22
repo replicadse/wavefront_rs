@@ -43,7 +43,7 @@ release:
   FROM +code
   ARG version
   RUN [ ! -z "$version" ] || exit 1
-  RUN sed 's/version = "0.0.0"/version = "'{version}'"/g' Cargo.toml > Cargo.toml.tmp
+  RUN sed 's/version = "0.0.0"/version = "$version"/g' Cargo.toml > Cargo.toml.tmp
   RUN mv Cargo.toml.tmp Cargo.toml
   RUN --secret token cargo login $token
   RUN cargo publish --allow-dirty
