@@ -2,7 +2,6 @@
 //!
 
 use crate::obj::entity::Entity;
-use std::error::Error;
 use std::io::Write;
 
 /// Will write entities to a `Write` trait.
@@ -10,8 +9,8 @@ pub struct Writer {}
 
 impl Writer {
     /// Writes the given entity to the given `Write` trait as OBJ format representation of that `Entity`.
-    pub fn write<W: Write>(writer: &mut W, e: &Entity) -> std::result::Result<(), Box<dyn Error>> {
-        let safecall = move |writer: &mut W, e: &Entity| -> std::result::Result<(), Box<dyn Error>> {
+    pub fn write<W: Write>(writer: &mut W, e: &Entity) -> std::result::Result<(), Box<dyn std::error::Error>> {
+        let safecall = move |writer: &mut W, e: &Entity| -> std::result::Result<(), Box<dyn std::error::Error>> {
             match e {
                 Entity::Comment { content } => {
                     writer.write_all(format!("{} {}", e.token(), content).as_ref())?;

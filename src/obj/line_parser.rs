@@ -1,5 +1,4 @@
 use crate::obj::entity::{Entity, FaceVertex};
-use std::error::Error;
 
 pub struct LineParser {}
 
@@ -8,7 +7,7 @@ impl LineParser {
         split: &mut std::str::SplitWhitespace,
         token: &str,
         line: &str,
-    ) -> std::result::Result<Entity, Box<dyn Error>> {
+    ) -> std::result::Result<Entity, Box<dyn std::error::Error>> {
         match token.to_lowercase().as_str() {
             "#" => Ok(Entity::Comment {
                 content: line.trim_start_matches("# ").to_owned(),
@@ -58,7 +57,7 @@ impl LineParser {
 
     fn parse_v(
         split: &mut std::str::SplitWhitespace,
-    ) -> std::result::Result<Entity, Box<dyn Error>> {
+    ) -> std::result::Result<Entity, Box<dyn std::error::Error>> {
         let xs = split.next();
         let ys = split.next();
         let zs = split.next();
@@ -99,7 +98,7 @@ impl LineParser {
     fn parse_vt_vp(
         is_vt: bool,
         split: &mut std::str::SplitWhitespace,
-    ) -> std::result::Result<Entity, Box<dyn Error>> {
+    ) -> std::result::Result<Entity, Box<dyn std::error::Error>> {
         let us = split.next();
         let vs = split.next();
         let ws = split.next();
@@ -154,7 +153,7 @@ impl LineParser {
 
     fn parse_vn(
         split: &mut std::str::SplitWhitespace,
-    ) -> std::result::Result<Entity, Box<dyn Error>> {
+    ) -> std::result::Result<Entity, Box<dyn std::error::Error>> {
         let xs = split.next();
         let ys = split.next();
         let zs = split.next();
@@ -180,7 +179,7 @@ impl LineParser {
 
     fn parse_face(
         split: &mut std::str::SplitWhitespace,
-    ) -> std::result::Result<Entity, Box<dyn Error>> {
+    ) -> std::result::Result<Entity, Box<dyn std::error::Error>> {
         let mut face = Vec::new();
         for vtn in split {
             let mut vtns = vtn.split('/');
@@ -209,7 +208,7 @@ impl LineParser {
 
     fn parse_polyline(
         split: &mut std::str::SplitWhitespace,
-    ) -> std::result::Result<Entity, Box<dyn Error>> {
+    ) -> std::result::Result<Entity, Box<dyn std::error::Error>> {
         let mut vertices = Vec::new();
         for x in split {
             vertices.push(x.parse::<i64>()?)
@@ -219,7 +218,7 @@ impl LineParser {
 
     fn parse_point(
         split: &mut std::str::SplitWhitespace,
-    ) -> std::result::Result<Entity, Box<dyn Error>> {
+    ) -> std::result::Result<Entity, Box<dyn std::error::Error>> {
         let mut vertices = Vec::new();
         for x in split {
             vertices.push(x.parse::<i64>()?)

@@ -3,7 +3,6 @@
 
 use crate::obj::entity::Entity;
 use crate::obj::line_parser::LineParser;
-use std::error::Error;
 use std::io::BufRead;
 use std::result::Result;
 
@@ -17,7 +16,7 @@ impl Parser {
     pub fn read_to_end<R: BufRead>(
         reader: &mut R,
         mut callback: impl FnMut(Entity),
-    ) -> Result<(), Box<dyn Error>> {
+    ) -> Result<(), Box<dyn std::error::Error>> {
         for l in reader.lines() {
             let s: String = l?;
             let mut split = s.split_whitespace();
@@ -33,7 +32,7 @@ impl Parser {
 
     /// Will read from the given `BufRead` until the first encountered linebreak.\
     /// Will return `Ok(Entity)` if successful or an `Error` (if parsing failed).
-    pub fn read_line<R: BufRead>(reader: &mut R) -> Result<Entity, Box<dyn Error>> {
+    pub fn read_line<R: BufRead>(reader: &mut R) -> Result<Entity, Box<dyn std::error::Error>> {
         let value = &mut String::new();
         match reader.read_line(value) {
             Ok(x) => {
