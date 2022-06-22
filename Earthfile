@@ -32,7 +32,6 @@ fmt:
 test:
   FROM +code
   ARG features
-  RUN [ ! -z "$features" ] || exit 1
   RUN cargo test $features
 
 docs:
