@@ -1,6 +1,6 @@
-//! Contains the entity types that are used when working with the [`wavefront obj`] format.
+//! Contains the entity types that are used when working with the [`wavefront mtl`] format.
 //!
-//! [`wavefront obj`]: https://en.wikipedia.org/wiki/Wavefront_.obj_file
+//! [`wavefront mtl`]: https://en.wikipedia.org/wiki/Wavefront_.obj_file
 //!
 
 use crate::mtl::parser::*;

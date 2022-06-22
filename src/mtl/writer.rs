@@ -1,4 +1,4 @@
-//! Contains the logic to transform entities to OBJ formatted strings.
+//! Contains the logic to transform entities to MTL formatted strings.
 //!
 
 use crate::mtl::entity::Entity;
@@ -8,7 +8,7 @@ use std::io::Write;
 pub struct Writer {}
 
 impl Writer {
-    /// Writes the given entity to the given `Write` trait as OBJ format representation of that `Entity`.
+    /// Writes the given entity to the given `Write` trait as MTL format representation of that `Entity`.
     pub fn write<W: Write>(
         writer: &mut W,
         e: &Entity,
