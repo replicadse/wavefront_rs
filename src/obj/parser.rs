@@ -46,7 +46,7 @@ impl Parser {
                     Err(Box::new(crate::error::ParserError::new("reached EOF")))
                 }
             }
-            Err(_) => Err(Box::new(crate::error::ParserError::new(
+            Err(..) => Err(Box::new(crate::error::ParserError::new(
                 "error reading line",
             ))),
         }
@@ -123,7 +123,7 @@ impl Parser {
         let w = match ws {
             Some(v) => match v.parse::<f64>() {
                 Ok(v) => Some(v),
-                Err(_) => {
+                Err(..) => {
                     return Err(Box::new(crate::error::ParserError::new(
                         "invalid data for v",
                     )))
@@ -160,7 +160,7 @@ impl Parser {
         let v = match vs {
             Some(v) => match v.parse::<f64>() {
                 Ok(v) => Some(v),
-                Err(_) => {
+                Err(..) => {
                     return Err(Box::new(crate::error::ParserError::new(
                         format!("invalid data for {}", if is_vt { "vt" } else { "vp" }).as_ref(),
                     )))
@@ -171,7 +171,7 @@ impl Parser {
         let w = match ws {
             Some(v) => match v.parse::<f64>() {
                 Ok(v) => Some(v),
-                Err(_) => {
+                Err(..) => {
                     return Err(Box::new(crate::error::ParserError::new(
                         format!("invalid data for {}", if is_vt { "vt" } else { "vp" }).as_ref(),
                     )))

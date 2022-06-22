@@ -29,7 +29,7 @@ impl Writer {
                                     "{}{}",
                                     match v.texture {
                                         None => "//",
-                                        Some(_) => "/",
+                                        Some(..) => "/",
                                     },
                                     x
                                 )
