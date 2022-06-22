@@ -1,8 +1,8 @@
 //! Contains logic to read entities from a `BufRead` that returns OBJ formatted strings.
 //!
 
-use crate::obj::entity::FaceVertex;
 use crate::obj::entity::Entity;
+use crate::obj::entity::FaceVertex;
 use std::io::BufRead;
 use std::result::Result;
 
@@ -186,17 +186,9 @@ impl Parser {
         }
 
         if is_vt {
-            Ok(Entity::VertexTexture {
-                u: u?,
-                v,
-                w,
-            })
+            Ok(Entity::VertexTexture { u: u?, v, w })
         } else {
-            Ok(Entity::VertexParameter {
-                u: u?,
-                v,
-                w,
-            })
+            Ok(Entity::VertexParameter { u: u?, v, w })
         }
     }
 

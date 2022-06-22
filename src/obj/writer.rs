@@ -9,8 +9,13 @@ pub struct Writer {}
 
 impl Writer {
     /// Writes the given entity to the given `Write` trait as OBJ format representation of that `Entity`.
-    pub fn write<W: Write>(writer: &mut W, e: &Entity) -> std::result::Result<(), Box<dyn std::error::Error>> {
-        let safecall = move |writer: &mut W, e: &Entity| -> std::result::Result<(), Box<dyn std::error::Error>> {
+    pub fn write<W: Write>(
+        writer: &mut W,
+        e: &Entity,
+    ) -> std::result::Result<(), Box<dyn std::error::Error>> {
+        let safecall = move |writer: &mut W,
+                             e: &Entity|
+              -> std::result::Result<(), Box<dyn std::error::Error>> {
             match e {
                 Entity::Comment { content } => {
                     writer.write_all(format!("{} {}", e.token(), content).as_ref())?;
@@ -100,7 +105,9 @@ impl Writer {
         };
         match safecall(writer, e) {
             Ok(..) => Ok(()),
-            Err(err) => Err(Box::new(crate::error::WriterError::new(err.to_string().as_ref()))),
+            Err(err) => Err(Box::new(crate::error::WriterError::new(
+                err.to_string().as_ref(),
+            ))),
         }
     }
 }
