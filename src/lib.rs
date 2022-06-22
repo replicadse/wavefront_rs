@@ -19,3 +19,9 @@ pub mod obj {
     pub mod parser;
     pub mod writer;
 }
+
+pub mod mtl {
+    pub mod entity;
+    pub mod parser;
+    pub mod writer;
+}

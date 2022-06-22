@@ -92,7 +92,7 @@ fn test_from_objformat_merging_group() {
 
 #[test]
 fn test_into_format_mtllib() {
-    let entity = Entity::Mtllib {
+    let entity = Entity::MtlLib {
         name: "token".to_owned(),
     };
     assert_eq!("mtllib token", Into::<Format>::into(entity));
@@ -102,7 +102,7 @@ fn test_into_format_mtllib() {
 fn test_from_objformat_mtllib() {
     assert_eq!(
         Entity::from(Format::from("mtllib token")),
-        Entity::Mtllib {
+        Entity::MtlLib {
             name: "token".to_owned()
         }
     );
@@ -110,7 +110,7 @@ fn test_from_objformat_mtllib() {
 
 #[test]
 fn test_into_format_usemtl() {
-    let entity = Entity::Usemtl {
+    let entity = Entity::UseMtl {
         name: "token".to_owned(),
     };
     assert_eq!("usemtl token", Into::<Format>::into(entity));
@@ -120,7 +120,7 @@ fn test_into_format_usemtl() {
 fn test_from_objformat_usemtl() {
     assert_eq!(
         Entity::from(Format::from("usemtl token")),
-        Entity::Usemtl {
+        Entity::UseMtl {
             name: "token".to_owned()
         }
     );
@@ -561,7 +561,7 @@ fn test_token_merging_group() {
 fn test_token_mtllib() {
     assert_eq!(
         "mtllib",
-        Entity::Mtllib {
+        Entity::MtlLib {
             name: "".to_owned()
         }
         .token()
@@ -572,7 +572,7 @@ fn test_token_mtllib() {
 fn test_token_usemtl() {
     assert_eq!(
         "usemtl",
-        Entity::Usemtl {
+        Entity::UseMtl {
             name: "".to_owned()
         }
         .token()
@@ -689,7 +689,7 @@ fn test_to_string_merging_group() {
 
 #[test]
 fn test_to_string_mtllib() {
-    let entity = Entity::Mtllib {
+    let entity = Entity::MtlLib {
         name: "token".to_owned(),
     };
     assert_eq!("mtllib token", entity.to_string());
@@ -697,7 +697,7 @@ fn test_to_string_mtllib() {
 
 #[test]
 fn test_to_string_usemtl() {
-    let entity = Entity::Usemtl {
+    let entity = Entity::UseMtl {
         name: "token".to_owned(),
     };
     assert_eq!("usemtl token", entity.to_string());

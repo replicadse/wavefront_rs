@@ -80,24 +80,12 @@ impl Parser {
             "f" => Self::parse_face(split),
             "l" => Self::parse_polyline(split),
             "p" => Self::parse_point(split),
-            "mtllib" => {
-                if let Some(x) = split.next() {
-                    Ok(Entity::Mtllib { name: x.to_owned() })
-                } else {
-                    Err(Box::new(crate::error::ParserError::new(
-                        format!("could not parse line \"{}\"", token).as_ref(),
-                    )))
-                }
-            }
-            "usemtl" => {
-                if let Some(x) = split.next() {
-                    Ok(Entity::Usemtl { name: x.to_owned() })
-                } else {
-                    Err(Box::new(crate::error::ParserError::new(
-                        format!("could not parse line \"{}\"", token).as_ref(),
-                    )))
-                }
-            }
+            "mtllib" => Ok(Entity::MtlLib {
+                name: line.trim_start_matches("mtllib ").to_owned(),
+            }),
+            "usemtl" => Ok(Entity::UseMtl {
+                name: line.trim_start_matches("usemtl ").to_owned(),
+            }),
             _ => Err(Box::new(crate::error::ParserError::new(
                 format!("unknown token \"{}\"", token).as_ref(),
             ))),

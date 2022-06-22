@@ -148,7 +148,7 @@ fn test_read_to_end_mtllib() {
     let exists = std::cell::Cell::new(false);
     Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
-            Entity::Mtllib {
+            Entity::MtlLib {
                 name: "token".to_owned()
             },
             x
@@ -163,7 +163,7 @@ fn test_read_to_end_mtllib() {
 fn test_parse_line_mtllib() {
     let stream = std::io::Cursor::new("mtllib token");
     assert_eq!(
-        Entity::Mtllib {
+        Entity::MtlLib {
             name: "token".to_owned()
         },
         Parser::parse_line(&mut BufReader::new(stream)).unwrap()
@@ -176,7 +176,7 @@ fn test_read_to_end_usemtl() {
     let exists = std::cell::Cell::new(false);
     Parser::read_to_end(&mut BufReader::new(stream), |x| {
         assert_eq!(
-            Entity::Usemtl {
+            Entity::UseMtl {
                 name: "token".to_owned()
             },
             x
@@ -191,7 +191,7 @@ fn test_read_to_end_usemtl() {
 fn test_parse_line_usemtl() {
     let stream = std::io::Cursor::new("usemtl token");
     assert_eq!(
-        Entity::Usemtl {
+        Entity::UseMtl {
             name: "token".to_owned()
         },
         Parser::parse_line(&mut BufReader::new(stream)).unwrap()

@@ -58,7 +58,7 @@ impl Writer {
                 Entity::Group { name } => {
                     writer.write_all(format!("{} {}", e.token(), name).as_ref())?;
                 }
-                Entity::Mtllib { name } => {
+                Entity::MtlLib { name } => {
                     writer.write_all(format!("{} {}", e.token(), name).as_ref())?;
                 }
                 Entity::Object { name } => {
@@ -70,7 +70,7 @@ impl Writer {
                 Entity::MergingGroup { name } => {
                     writer.write_all(format!("{} {}", e.token(), name).as_ref())?;
                 }
-                Entity::Usemtl { name } => {
+                Entity::UseMtl { name } => {
                     writer.write_all(format!("{} {}", e.token(), name).as_ref())?;
                 }
                 Entity::Vertex { x, y, z, w } => {

@@ -27,10 +27,10 @@ pub enum Entity {
     MergingGroup {
         name: String,
     },
-    Mtllib {
+    MtlLib {
         name: String,
     },
-    Usemtl {
+    UseMtl {
         name: String,
     },
     /// Vertex consists of `x`, `y`, `z` and `w` whereas `w` is optional.\
@@ -100,8 +100,8 @@ impl Entity {
             Self::Group { .. } => "g",
             Self::SmoothingGroup { .. } => "s",
             Self::MergingGroup { .. } => "mg",
-            Self::Mtllib { .. } => "mtllib",
-            Self::Usemtl { .. } => "usemtl",
+            Self::MtlLib { .. } => "mtllib",
+            Self::UseMtl { .. } => "usemtl",
             Self::Vertex { .. } => "v",
             Self::VertexNormal { .. } => "vn",
             Self::VertexTexture { .. } => "vt",

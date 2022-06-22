@@ -54,7 +54,7 @@ fn test_write_merging_group() {
 
 #[test]
 fn test_write_mtllib() {
-    let entity = Entity::Mtllib {
+    let entity = Entity::MtlLib {
         name: "token".to_owned(),
     };
     let mut result = String::new();
@@ -64,7 +64,7 @@ fn test_write_mtllib() {
 
 #[test]
 fn test_write_usemtl() {
-    let entity = Entity::Usemtl {
+    let entity = Entity::UseMtl {
         name: "token".to_owned(),
     };
     let mut result = String::new();

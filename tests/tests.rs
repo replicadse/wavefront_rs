@@ -9,3 +9,9 @@ mod obj {
         mod test_writer;
     }
 }
+
+mod mtl {
+    mod integration {
+        mod integration_tests;
+    }
+}
