@@ -1,4 +1,4 @@
-//! Contains logic to read entities from a `BufRead` that returns OBJ formatted strings.
+//! Contains logic to read entities from a `BufRead` that returns MTL formatted strings.
 //!
 
 use crate::mtl::entity::IllumMode;
