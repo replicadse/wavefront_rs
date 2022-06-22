@@ -1,8 +1,8 @@
 VERSION 0.6
 
 rust:
-  ARG toolchain
   FROM alpine:3.16
+  ARG toolchain
   RUN [ ! -z "$toolchain" ] || exit 1
 
   RUN apk update && apk upgrade
@@ -22,11 +22,18 @@ code:
 
 build:
   FROM +code
-  RUN cargo build
+  ARG flags
+  RUN cargo build $flags
+
+fmt:
+  FROM +code
+  RUN cargo fmt --all -- --check
 
 test:
   FROM +code
-  RUN cargo test --all
+  ARG features
+  RUN [ ! -z "$features" ] || exit 1
+  RUN cargo test $features
 
 docs:
   FROM +code
