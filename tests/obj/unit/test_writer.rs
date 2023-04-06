@@ -1,9 +1,7 @@
 use std::io::BufWriter;
 
-use wavefront_rs::obj::{
-    entity::*,
-    writer::Writer,
-};
+use wavefront_rs::obj::entity::*;
+use wavefront_rs::obj::writer::Writer;
 
 #[test]
 fn test_write_comment() {
@@ -11,7 +9,9 @@ fn test_write_comment() {
         content: "token".to_owned(),
     };
     let mut result = String::new();
-    Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity).unwrap();
+    Writer { auto_newline: false }
+        .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity)
+        .unwrap();
     assert_eq!("# token", result);
 }
 
@@ -21,7 +21,9 @@ fn test_write_object() {
         name: "token".to_owned(),
     };
     let mut result = String::new();
-    Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity).unwrap();
+    Writer { auto_newline: false }
+        .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity)
+        .unwrap();
     assert_eq!("o token", result);
 }
 
@@ -31,7 +33,9 @@ fn test_write_group() {
         name: "token".to_owned(),
     };
     let mut result = String::new();
-    Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity).unwrap();
+    Writer { auto_newline: false }
+        .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity)
+        .unwrap();
     assert_eq!("g token", result);
 }
 
@@ -41,7 +45,9 @@ fn test_write_smoothing_group() {
         name: "token".to_owned(),
     };
     let mut result = String::new();
-    Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity).unwrap();
+    Writer { auto_newline: false }
+        .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity)
+        .unwrap();
     assert_eq!("s token", result);
 }
 
@@ -51,7 +57,9 @@ fn test_write_merging_group() {
         name: "token".to_owned(),
     };
     let mut result = String::new();
-    Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity).unwrap();
+    Writer { auto_newline: false }
+        .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity)
+        .unwrap();
     assert_eq!("mg token", result);
 }
 
@@ -61,7 +69,9 @@ fn test_write_mtllib() {
         name: "token".to_owned(),
     };
     let mut result = String::new();
-    Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity).unwrap();
+    Writer { auto_newline: false }
+        .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity)
+        .unwrap();
     assert_eq!("mtllib token", result);
 }
 
@@ -71,7 +81,9 @@ fn test_write_usemtl() {
         name: "token".to_owned(),
     };
     let mut result = String::new();
-    Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity).unwrap();
+    Writer { auto_newline: false }
+        .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity)
+        .unwrap();
     assert_eq!("usemtl token", result);
 }
 
@@ -84,7 +96,9 @@ fn test_write_vertex_xyzw() {
         w: Some(3f64),
     };
     let mut result = String::new();
-    Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity).unwrap();
+    Writer { auto_newline: false }
+        .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity)
+        .unwrap();
     assert_eq!("v 0 1 2 3", result);
 }
 
@@ -97,7 +111,9 @@ fn test_write_vertex_xyz() {
         w: None,
     };
     let mut result = String::new();
-    Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity).unwrap();
+    Writer { auto_newline: false }
+        .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity)
+        .unwrap();
     assert_eq!("v 0 1 2", result);
 }
 
@@ -109,7 +125,9 @@ fn test_write_vertex_normal() {
         z: 2f64,
     };
     let mut result = String::new();
-    Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity).unwrap();
+    Writer { auto_newline: false }
+        .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity)
+        .unwrap();
     assert_eq!("vn 0 1 2", result);
 }
 
@@ -121,7 +139,9 @@ fn test_write_vertex_texture_u() {
         w: None,
     };
     let mut result = String::new();
-    Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity).unwrap();
+    Writer { auto_newline: false }
+        .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity)
+        .unwrap();
     assert_eq!("vt 0.1", result);
 }
 
@@ -133,7 +153,9 @@ fn test_write_vertex_texture_uv() {
         w: None,
     };
     let mut result = String::new();
-    Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity).unwrap();
+    Writer { auto_newline: false }
+        .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity)
+        .unwrap();
     assert_eq!("vt 0.1 1.2", result);
 }
 
@@ -145,7 +167,9 @@ fn test_write_vertex_texture_uvw() {
         w: Some(2.3f64),
     };
     let mut result = String::new();
-    Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity).unwrap();
+    Writer { auto_newline: false }
+        .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity)
+        .unwrap();
     assert_eq!("vt 0.1 1.2 2.3", result);
 }
 
@@ -157,7 +181,9 @@ fn test_write_vertex_parameter_uvw() {
         w: Some(2.3f64),
     };
     let mut result = String::new();
-    Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity).unwrap();
+    Writer { auto_newline: false }
+        .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity)
+        .unwrap();
     assert_eq!("vp 0.1 1.2 2.3", result);
 }
 
@@ -169,7 +195,9 @@ fn test_write_vertex_parameter_uv() {
         w: None,
     };
     let mut result = String::new();
-    Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity).unwrap();
+    Writer { auto_newline: false }
+        .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity)
+        .unwrap();
     assert_eq!("vp 0.1 1.2", result);
 }
 
@@ -181,7 +209,9 @@ fn test_write_vertex_parameter_u() {
         w: None,
     };
     let mut result = String::new();
-    Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity).unwrap();
+    Writer { auto_newline: false }
+        .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity)
+        .unwrap();
     assert_eq!("vp 0.1", result);
 }
 
@@ -195,7 +225,9 @@ fn test_write_face_vtn_3() {
         ],
     };
     let mut result = String::new();
-    Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity).unwrap();
+    Writer { auto_newline: false }
+        .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity)
+        .unwrap();
     assert_eq!("f 0/1/2 3/4/5 6/7/8", result);
 }
 
@@ -212,7 +244,9 @@ fn test_write_face_vtn_6() {
         ],
     };
     let mut result = String::new();
-    Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity).unwrap();
+    Writer { auto_newline: false }
+        .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity)
+        .unwrap();
     assert_eq!("f 0/1/2 3/4/5 6/7/8 9/10/11 12/13/14 15/16/17", result);
 }
 
@@ -226,7 +260,9 @@ fn test_write_face_vt() {
         ],
     };
     let mut result = String::new();
-    Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity).unwrap();
+    Writer { auto_newline: false }
+        .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity)
+        .unwrap();
     assert_eq!("f 0/1 3/4 6/7", result);
 }
 
@@ -240,7 +276,9 @@ fn test_write_face_vn() {
         ],
     };
     let mut result = String::new();
-    Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity).unwrap();
+    Writer { auto_newline: false }
+        .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity)
+        .unwrap();
     assert_eq!("f 0//2 3//5 6//8", result);
 }
 
@@ -254,7 +292,9 @@ fn test_write_face_v() {
         ],
     };
     let mut result = String::new();
-    Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity).unwrap();
+    Writer { auto_newline: false }
+        .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity)
+        .unwrap();
     assert_eq!("f 0 3 6", result);
 }
 // t
@@ -264,7 +304,9 @@ fn test_write_line() {
         vertices: vec![0, 1, 2, 3, 4],
     };
     let mut result = String::new();
-    Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity).unwrap();
+    Writer { auto_newline: false }
+        .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity)
+        .unwrap();
     assert_eq!("l 0 1 2 3 4", result);
 }
 
@@ -274,6 +316,8 @@ fn test_write_point() {
         vertices: vec![0, 1, 2, 3, 4],
     };
     let mut result = String::new();
-    Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity).unwrap();
+    Writer { auto_newline: false }
+        .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), &entity)
+        .unwrap();
     assert_eq!("p 0 1 2 3 4", result);
 }

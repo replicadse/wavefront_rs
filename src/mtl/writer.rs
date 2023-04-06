@@ -5,12 +5,14 @@ use std::io::Write;
 use crate::mtl::entity::Entity;
 
 /// Will write entities to a `Write` trait.
-pub struct Writer {}
+pub struct Writer {
+    pub auto_newline: bool,
+}
 
 impl Writer {
     /// Writes the given entity to the given `Write` trait as MTL format
     /// representation of that `Entity`.
-    pub fn write<W: Write>(writer: &mut W, e: &Entity) -> std::result::Result<(), Box<dyn std::error::Error>> {
+    pub fn write<W: Write>(&self, writer: &mut W, e: &Entity) -> std::result::Result<(), Box<dyn std::error::Error>> {
         let safecall = move |writer: &mut W, e: &Entity| -> std::result::Result<(), Box<dyn std::error::Error>> {
             match e {
                 | Entity::Comment { content } => {
@@ -73,6 +75,9 @@ impl Writer {
                 | Entity::SphericalReflectionMap { file } => {
                     writer.write_all(format!("{} {}", e.token(), file).as_ref())?;
                 },
+            }
+            if self.auto_newline {
+                writer.write_all("\n".as_bytes())?;
             }
             Ok(())
         };

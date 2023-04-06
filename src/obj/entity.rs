@@ -3,16 +3,9 @@
 //!
 //! [`wavefront obj`]: https://en.wikipedia.org/wiki/Wavefront_.obj_file
 
-use std::io::{
-    BufReader,
-    BufWriter,
-    Cursor,
-};
+use std::io::{BufReader, BufWriter, Cursor};
 
-use crate::obj::{
-    parser::*,
-    writer::*,
-};
+use crate::obj::{parser::*, writer::*};
 
 pub type Format = String;
 
@@ -153,7 +146,9 @@ impl FaceVertex {
 impl ToString for Entity {
     fn to_string(&self) -> String {
         let mut result = String::new();
-        Writer::write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), self).unwrap();
+        Writer { auto_newline: false }
+            .write(&mut BufWriter::new(unsafe { result.as_mut_vec() }), self)
+            .unwrap();
         result
     }
 }
