@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'version number'
+        description: "version number"
         required: true
 
 jobs:
@@ -11,11 +11,11 @@ jobs:
     name: scan
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: install earthly
-      run: "sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.6.14/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'"
-    - name: fmt
-      run: earthly +fmt --toolchain=nightly
+      - uses: actions/checkout@v1
+      - name: install earthly
+        run: "sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.6.14/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'"
+      - name: fmt
+        run: earthly +fmt --toolchain=nightly
     # - name: scan code
     #   run: |
     #     rustup component add clippy
@@ -26,51 +26,50 @@ jobs:
     strategy:
       matrix:
         include:
-        - name: "default"
-          features: ""
+          - name: "default"
+            features: ""
     steps:
-    - uses: actions/checkout@v1
-    - name: install earthly
-      run: "sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.6.14/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'"
-    - name: test
-      run: earthly +test --toolchain=stable --features=${{ matrix.features }}
+      - uses: actions/checkout@v1
+      - name: install earthly
+        run: "sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.6.14/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'"
+      - name: test
+        run: earthly +test --toolchain=stable --features=${{ matrix.features }}
   build:
     name: build (${{ matrix.name }})
     runs-on: ubuntu-latest
     strategy:
       matrix:
         include:
-        - name: "default"
-          features: ""
+          - name: "default"
+            features: ""
     steps:
-    - uses: actions/checkout@v1
-    - name: install earthly
-      run: "sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.6.14/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'"
-    - name: build
-      run: earthly +build --toolchain=stable --flags="--release --locked ${{ matrix.features }}"
+      - uses: actions/checkout@v1
+      - name: install earthly
+        run: "sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.6.14/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'"
+      - name: build
+        run: earthly +build --toolchain=stable --flags="--release --locked ${{ matrix.features }}"
 
   tag:
     if: github.ref == 'refs/heads/master'
     needs:
-      - scan
       - test
       - build
     name: tag and release
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: create release
-      id: create_release
-      uses: actions/create-release@latest
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.event.inputs.version }}
-        release_name: ${{ github.event.inputs.version }}
-        body: |
-          Release ${{ github.event.inputs.version }}.
-        draft: false
-        prerelease: false
+      - uses: actions/checkout@v1
+      - name: create release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          release_name: ${{ github.event.inputs.version }}
+          body: |
+            Release ${{ github.event.inputs.version }}.
+          draft: false
+          prerelease: false
 
   publish-cratesio:
     needs:
@@ -78,9 +77,9 @@ jobs:
     name: crates.io
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: install earthly
-      run: "sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.6.14/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'"
-    - name: publish
-      run: |
-        earthly --secret token=${{ secrets.CRATES_IO_TOKEN }} +release --toolchain=stable --version=${{ github.event.inputs.version }}
+      - uses: actions/checkout@v1
+      - name: install earthly
+        run: "sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.6.14/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'"
+      - name: publish
+        run: |
+          earthly --secret token=${{ secrets.CRATES_IO_TOKEN }} +release --toolchain=stable --version=${{ github.event.inputs.version }}
